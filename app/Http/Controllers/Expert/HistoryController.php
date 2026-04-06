@@ -13,13 +13,13 @@ class HistoryController extends Controller
     {
         return Inertia::render('expert/riwayat/index', [
             'verifications' => Verification::with([
-                'observation.species', 
+                'observation.species',
                 'observation.user',
-                'observation.photos' // Tambahkan ini untuk melihat foto yang diverifikasi
+                'observation.photos', // Tambahkan ini untuk melihat foto yang diverifikasi
             ])
-            ->where('expert_id', Auth::id())
-            ->latest()
-            ->get()
+                ->where('expert_id', Auth::id())
+                ->latest()
+                ->get(),
         ]);
     }
 }

@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('verifications', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('observation_id')->constrained()->onDelete('cascade');
-    $table->foreignId('expert_id')->constrained('users');
-    $table->boolean('is_valid');
-    $table->text('notes')->nullable();
-    $table->timestamps();
-});
+        Schema::create('verifications', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('observation_id')->constrained()->onDelete('cascade');
+            $table->foreignId('expert_id')->constrained('users');
+            $table->boolean('is_valid');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

@@ -11,14 +11,13 @@ class RoleCheck
 {
     /**
      * Handle an incoming request.
-     * * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     *
      * @param  string[]  ...$roles
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
         // 1. Cek apakah user sudah login
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect('/login');
         }
 

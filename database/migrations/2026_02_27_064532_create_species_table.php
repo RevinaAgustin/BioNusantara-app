@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('species', function (Blueprint $table) {
-    $table->id();
-    $table->string('scientific_name')->unique(); 
-    $table->string('category'); // Isi: 'Plankton', 'Hoya', atau 'Kayu'
-    $table->text('description')->nullable();
-    $table->timestamps();
-});
+            $table->id();
+            $table->string('scientific_name')->unique();
+            $table->string('category'); // Isi: 'Plankton', 'Hoya', atau 'Kayu'
+            $table->text('description')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**

@@ -31,7 +31,7 @@ class VerificationController extends Controller
 
         // Admin memverifikasi apakah akun ini layak jadi Expert
         $expert->update([
-            'expert_verified_at' => $request->status === 'verified' ? now() : null
+            'expert_verified_at' => $request->status === 'verified' ? now() : null,
         ]);
 
         return back()->with('success', 'Status verifikasi akun Expert diperbarui.');

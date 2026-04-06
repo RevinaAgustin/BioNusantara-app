@@ -13,9 +13,9 @@ class VerificationService
     /**
      * Proses verifikasi observasi oleh expert.
      *
-     * @param array $data Data verifikasi (observation_id, is_valid, expert_notes)
-     * @param int $expertId ID expert yang melakukan verifikasi
-     * @return Verification
+     * @param  array  $data  Data verifikasi (observation_id, is_valid, expert_notes)
+     * @param  int  $expertId  ID expert yang melakukan verifikasi
+     *
      * @throws ValidationException
      */
     public function processVerification(array $data, int $expertId): Verification
@@ -50,10 +50,6 @@ class VerificationService
     /**
      * Memperbarui verifikasi yang sudah ada.
      *
-     * @param int $verificationId
-     * @param array $data
-     * @param int $expertId
-     * @return Verification
      * @throws ValidationException
      */
     public function updateVerification(int $verificationId, array $data, int $expertId): Verification
@@ -93,7 +89,6 @@ class VerificationService
     /**
      * Mendapatkan daftar observasi yang menunggu verifikasi.
      *
-     * @param array $filters
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getPendingObservations(array $filters = [])
@@ -102,15 +97,15 @@ class VerificationService
             ->where('status', 'pending');
 
         // Filter by species if provided
-        if (!empty($filters['species_id'])) {
+        if (! empty($filters['species_id'])) {
             $query->where('species_id', $filters['species_id']);
         }
 
         // Filter by date range if provided
-        if (!empty($filters['date_from'])) {
+        if (! empty($filters['date_from'])) {
             $query->whereDate('created_at', '>=', $filters['date_from']);
         }
-        if (!empty($filters['date_to'])) {
+        if (! empty($filters['date_to'])) {
             $query->whereDate('created_at', '<=', $filters['date_to']);
         }
 
@@ -119,9 +114,6 @@ class VerificationService
 
     /**
      * Mendapatkan statistik verifikasi untuk expert.
-     *
-     * @param int $expertId
-     * @return array
      */
     public function getExpertStatistics(int $expertId): array
     {
@@ -141,43 +133,39 @@ class VerificationService
     /**
      * Validasi sebelum verifikasi.
      *
-     * @param int $observationId
      * @throws ValidationException
      */
     private function validateVerification(int $observationId): void
     {
         $observation = Observation::find($observationId);
 
-        if (!$observation) {
+        if (! $observation) {
             throw ValidationException::withMessages([
-                'observation_id' => 'Observasi tidak ditemukan.'
+                'observation_id' => 'Observasi tidak ditemukan.',
             ]);
         }
 
         if ($observation->status !== 'pending') {
             throw ValidationException::withMessages([
-                'observation_id' => 'Observasi ini sudah diverifikasi sebelumnya.'
+                'observation_id' => 'Observasi ini sudah diverifikasi sebelumnya.',
             ]);
         }
 
         $existingVerification = Verification::where('observation_id', $observationId)->first();
         if ($existingVerification) {
             throw ValidationException::withMessages([
-                'observation_id' => 'Observasi ini sudah memiliki record verifikasi.'
+                'observation_id' => 'Observasi ini sudah memiliki record verifikasi.',
             ]);
         }
     }
 
     /**
      * Log aktivitas verifikasi.
-     *
-     * @param Verification $verification
-     * @param Observation $observation
      */
     private function logVerificationActivity(Verification $verification, Observation $observation): void
     {
         $status = $verification->is_valid ? 'verified' : 'rejected';
-        
+
         Log::info('Observasi diverifikasi', [
             'observation_id' => $observation->id,
             'expert_id' => $verification->expert_id,
@@ -189,9 +177,6 @@ class VerificationService
 
     /**
      * Log perubahan verifikasi.
-     *
-     * @param Verification $verification
-     * @param array $oldData
      */
     private function logVerificationUpdate(Verification $verification, array $oldData): void
     {
@@ -209,14 +194,11 @@ class VerificationService
 
     /**
      * Hitung rata-rata verifikasi per hari.
-     *
-     * @param int $expertId
-     * @return float
      */
     private function calculateAveragePerDay(int $expertId): float
     {
         $total = Verification::where('expert_id', $expertId)->count();
-        
+
         if ($total === 0) {
             return 0;
         }
@@ -225,20 +207,17 @@ class VerificationService
             ->orderBy('created_at', 'asc')
             ->first();
 
-        if (!$firstVerification) {
+        if (! $firstVerification) {
             return 0;
         }
 
         $days = max(1, now()->diffInDays($firstVerification->created_at));
-        
+
         return round($total / $days, 2);
     }
 
     /**
      * Mendapatkan detail verifikasi lengkap dengan relasi.
-     *
-     * @param int $verificationId
-     * @return Verification|null
      */
     public function getVerificationWithRelations(int $verificationId): ?Verification
     {
@@ -248,10 +227,6 @@ class VerificationService
 
     /**
      * Mengecek apakah expert sudah pernah memverifikasi observasi tertentu.
-     *
-     * @param int $observationId
-     * @param int $expertId
-     * @return bool
      */
     public function hasExpertVerified(int $observationId, int $expertId): bool
     {

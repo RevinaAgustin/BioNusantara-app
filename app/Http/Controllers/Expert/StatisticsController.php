@@ -41,7 +41,7 @@ class StatisticsController extends Controller
         return Inertia::render('expert/statistik/index', [
             'statistics' => $stats,
             'distribution' => $distribution,
-            'monthlyTrend' => $monthlyTrend
+            'monthlyTrend' => $monthlyTrend,
         ]);
     }
 }

@@ -14,7 +14,7 @@ class Verification extends Model
         'observation_id',
         'expert_id',
         'is_valid',
-        'notes' // Sesuaikan dengan request kamu (catatan expert)
+        'notes', // Sesuaikan dengan request kamu (catatan expert)
     ];
 
     protected $casts = [

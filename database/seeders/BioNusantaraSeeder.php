@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Role;
 use App\Models\Species;
-use App\Models\Role; // Jika kamu membuat model Role
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Database\Seeder; // Jika kamu membuat model Role
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class BioNusantaraSeeder extends Seeder
 {
@@ -57,33 +57,33 @@ class BioNusantaraSeeder extends Seeder
         ]);
 
         // 4. SEEDER SPECIES (Disesuaikan dengan Notebook .ipynb kamu)
-        
+
         // --- Kategori Plankton (26 Spesies sesuai ModelPlankton.ipynb) ---
         $planktons = [
-            "Achnanthes sp", "Bacteriastrum delicatulum", "Bleakeleya notata", "Chaetoceros affinis", 
-            "Chaetoceros diversus", "Chaetoceros peruvianus", "Coscinodiscus oculus-iridis", "Diatom", 
-            "Guinardia flaccida", "Hemiaulus hauckii", "Hemiaulus membranaceus", "Mastogloia sp", 
-            "Nitzschia", "Nitzschia longissima", "Plagiotropis lepidoptera", "Pleurosigma", 
-            "Proboscia alata", "Proboscia indica", "Pseudo-nitzschia spp", "Pseudosolenia calcar-avis",
-            "Rhizosolenia calcar-avis", "Rhizosolenia cochlea", "Rhizosolenia imbricata", 
-            "Tetramphora (Amphora) decussata", "Thalassionema nitzschioides", "Toxarium undulatum"
+            'Achnanthes sp', 'Bacteriastrum delicatulum', 'Bleakeleya notata', 'Chaetoceros affinis',
+            'Chaetoceros diversus', 'Chaetoceros peruvianus', 'Coscinodiscus oculus-iridis', 'Diatom',
+            'Guinardia flaccida', 'Hemiaulus hauckii', 'Hemiaulus membranaceus', 'Mastogloia sp',
+            'Nitzschia', 'Nitzschia longissima', 'Plagiotropis lepidoptera', 'Pleurosigma',
+            'Proboscia alata', 'Proboscia indica', 'Pseudo-nitzschia spp', 'Pseudosolenia calcar-avis',
+            'Rhizosolenia calcar-avis', 'Rhizosolenia cochlea', 'Rhizosolenia imbricata',
+            'Tetramphora (Amphora) decussata', 'Thalassionema nitzschioides', 'Toxarium undulatum',
         ];
 
         foreach ($planktons as $name) {
             Species::create([
                 'scientific_name' => $name,
                 'category' => 'Plankton',
-                'description' => 'Spesies plankton teridentifikasi melalui dataset penelitian BioNusantara.'
+                'description' => 'Spesies plankton teridentifikasi melalui dataset penelitian BioNusantara.',
             ]);
         }
 
         // --- Kategori Hoya (Sesuai ModelHoya.ipynb) ---
-        $hoyas = ["Australis", "Cinnamomifolia", "Kerrii", "Latifolia"];
+        $hoyas = ['Australis', 'Cinnamomifolia', 'Kerrii', 'Latifolia'];
         foreach ($hoyas as $hoya) {
             Species::create([
-                'scientific_name' => "Hoya " . $hoya,
+                'scientific_name' => 'Hoya '.$hoya,
                 'category' => 'Hoya',
-                'description' => 'Tanaman hias genus Hoya dari dataset Model Hoya.'
+                'description' => 'Tanaman hias genus Hoya dari dataset Model Hoya.',
             ]);
         }
 
@@ -92,7 +92,7 @@ class BioNusantaraSeeder extends Seeder
         Species::create([
             'scientific_name' => 'Wood Identification Master',
             'category' => 'Kayu',
-            'description' => 'Master data untuk identifikasi jenis kayu.'
+            'description' => 'Master data untuk identifikasi jenis kayu.',
         ]);
     }
 }

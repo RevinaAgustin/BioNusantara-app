@@ -12,7 +12,7 @@ class ValidationController extends Controller
     {
         // Mengambil data spesies sebagai referensi pakar
         return Inertia::render('expert/validasi/index', [
-            'species_references' => Species::orderBy('category')->get()
+            'species_references' => Species::orderBy('category')->get(),
         ]);
     }
 }

@@ -4,31 +4,30 @@ namespace App\Services\User;
 
 use App\Models\Observation;
 use App\Models\ObservationPhoto;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
 
 class ObservationService
 {
     /**
      * Menyimpan data observasi beserta fotonya.
      *
-     * @param array $data Data dari request (latitude, longitude, notes, dll)
-     * @param int $userId ID User yang sedang login
-     * @return Observation
+     * @param  array  $data  Data dari request (latitude, longitude, notes, dll)
+     * @param  int  $userId  ID User yang sedang login
      */
     public function store(array $data, int $userId): Observation
     {
         return DB::transaction(function () use ($data, $userId) {
             // 1. Simpan data utama ke tabel 'observations'
             $observation = Observation::create([
-                'user_id'       => $userId,
-                'species_id'    => $data['species_id'] ?? null,
-                'latitude'      => $data['latitude'],
-                'longitude'     => $data['longitude'],
-                'notes'         => $data['notes'] ?? null,
+                'user_id' => $userId,
+                'species_id' => $data['species_id'] ?? null,
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'notes' => $data['notes'] ?? null,
                 'ai_confidence' => $data['ai_confidence'] ?? 0,
-                'status'        => 'pending',
+                'status' => 'pending',
             ]);
 
             // 2. Upload foto jika ada
@@ -42,10 +41,6 @@ class ObservationService
 
     /**
      * Upload photo untuk observasi.
-     *
-     * @param UploadedFile $photo
-     * @param int $observationId
-     * @return ObservationPhoto
      */
     public function uploadPhoto(UploadedFile $photo, int $observationId): ObservationPhoto
     {
@@ -55,15 +50,12 @@ class ObservationService
         // Simpan path-nya ke tabel 'observation_photos'
         return ObservationPhoto::create([
             'observation_id' => $observationId,
-            'file_path'      => $path,
+            'file_path' => $path,
         ]);
     }
 
     /**
      * Menghapus observasi beserta file fisik fotonya.
-     *
-     * @param Observation $observation
-     * @return bool|null
      */
     public function delete(Observation $observation): ?bool
     {
@@ -80,9 +72,6 @@ class ObservationService
 
     /**
      * Menghapus file foto dari storage dan record dari database.
-     *
-     * @param ObservationPhoto $photo
-     * @return bool|null
      */
     public function deletePhoto(ObservationPhoto $photo): ?bool
     {
@@ -90,17 +79,13 @@ class ObservationService
         if (Storage::disk('public')->exists($photo->file_path)) {
             Storage::disk('public')->delete($photo->file_path);
         }
-        
+
         // Hapus record foto
         return $photo->delete();
     }
 
     /**
      * Mendapatkan observasi dengan semua relasinya.
-     *
-     * @param int $observationId
-     * @param int $userId
-     * @return Observation|null
      */
     public function getObservationWithRelations(int $observationId, int $userId): ?Observation
     {
@@ -112,16 +97,12 @@ class ObservationService
 
     /**
      * Update status observasi.
-     *
-     * @param Observation $observation
-     * @param string $status
-     * @return bool
      */
     public function updateStatus(Observation $observation, string $status): bool
     {
         $allowedStatuses = ['pending', 'verified', 'rejected'];
-        
-        if (!in_array($status, $allowedStatuses)) {
+
+        if (! in_array($status, $allowedStatuses)) {
             throw new \InvalidArgumentException('Status tidak valid');
         }
 
@@ -130,9 +111,6 @@ class ObservationService
 
     /**
      * Mendapatkan statistik observasi user.
-     *
-     * @param int $userId
-     * @return array
      */
     public function getUserStatistics(int $userId): array
     {

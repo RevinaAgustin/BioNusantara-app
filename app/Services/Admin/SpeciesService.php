@@ -28,6 +28,7 @@ class SpeciesService
     public function deleteSpecies(int $id)
     {
         $species = Species::findOrFail($id);
+
         return $species->delete();
     }
 }

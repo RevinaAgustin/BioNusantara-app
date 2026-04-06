@@ -16,5 +16,4 @@ abstract class TestCase extends BaseTestCase
             DB::statement('PRAGMA foreign_keys = OFF');
         }
     }
-
 }

@@ -17,7 +17,7 @@ class VerificationController extends Controller
             'pendingObservations' => Observation::with(['user', 'photos', 'species'])
                 ->where('status', 'pending')
                 ->latest()
-                ->get()
+                ->get(),
         ]);
     }
 
@@ -39,6 +39,6 @@ class VerificationController extends Controller
         $observation = Observation::find($validated['observation_id']);
         $observation->update(['status' => $validated['is_valid'] ? 'verified' : 'rejected']);
 
-       return redirect()->back()->with('success', 'Berhasil memproses verifikasi observasi.');
+        return redirect()->back()->with('success', 'Berhasil memproses verifikasi observasi.');
     }
 }

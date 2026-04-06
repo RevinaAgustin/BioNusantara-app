@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-      Schema::create('observations', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-    $table->foreignId('species_id')->nullable()->constrained()->onDelete('set null');
-    $table->decimal('latitude', 10, 8);
-    $table->decimal('longitude', 11, 8);
-    $table->decimal('ai_confidence', 5, 2)->nullable(); // Menyimpan % akurasi AI
-    $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
-    $table->timestamps();
-});
+        Schema::create('observations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('species_id')->nullable()->constrained()->onDelete('set null');
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
+            $table->decimal('ai_confidence', 5, 2)->nullable(); // Menyimpan % akurasi AI
+            $table->enum('status', ['pending', 'verified', 'rejected'])->default('pending');
+            $table->timestamps();
+        });
     }
 
     /**
