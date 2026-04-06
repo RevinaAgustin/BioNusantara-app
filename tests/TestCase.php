@@ -9,11 +9,10 @@ abstract class TestCase extends BaseTestCase
 {
     protected function setUp(): void
     {
-        parent::setUp();
-
-        // Tambahkan baris ini untuk mematikan foreign key check di SQLite
-        if (config('database.default') === 'sqlite') {
+        if (isset($_SERVER['DB_CONNECTION']) && $_SERVER['DB_CONNECTION'] === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF');
         }
+
+        parent::setUp();
     }
 }
