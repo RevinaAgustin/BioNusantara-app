@@ -5,42 +5,44 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VerificationController as AdminVerification;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Expert\VerificationController as ExpertVerification;
-use App\Http\Controllers\Expert\ValidationController; // Tambahin ini
-use App\Http\Controllers\Expert\HistoryController;    // Tambahin ini
-use App\Http\Controllers\Expert\StatisticsController; // Tambahin ini
 use App\Http\Controllers\User\ObservationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
 /*
 |--------------------------------------------------------------------------
-| PUBLIC ROUTES (Bisa diakses tanpa login)
+| PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
-// PINDAH KE SINI: Biar publik bisa akses tanpa disuruh login
 Route::get('/jelajah', function () {
-    return inertia('Jelajah'); // Sesuaikan dengan nama file Jelajah.tsx kamu
+    return inertia('Jelajah'); 
 })->name('explore');
 
 Route::get('/peta', function () {
     return inertia('map');
 })->name('map');
 
+Route::get('/detailSpesies/{id}', function ($id) {
+    return inertia('detailSpesies', [
+        'id' => $id
+    ]);
+})->name('species.detail');
+
 
 /*
 |--------------------------------------------------------------------------
-| PRIVATE ROUTES (Wajib login)
+| PRIVATE ROUTES
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Admin Routes (Hanya Role Admin)
+    // Admin Routes
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::patch('/users/{user}/toggle', [UserController::class, 'toggleStatus'])->name('users.toggle');
@@ -53,16 +55,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('reports');
     });
 
-    // Expert Routes (Hanya Role Expert)
+    // Expert Routes
     Route::middleware(['role:expert'])->prefix('expert')->name('expert.')->group(function () {
         Route::get('/verifikasi', [ExpertVerification::class, 'index'])->name('verification.index');
-        Route::get('/validasi', [ValidationController::class, 'index'])->name('validation.index');
-        Route::get('/riwayat', [HistoryController::class, 'index'])->name('history.index');
-        Route::get('/statistik', [StatisticsController::class, 'index'])->name('statistics.index');
         Route::post('/verifikasi', [ExpertVerification::class, 'store'])->name('verification.store');
+        
+        // Gue buatkan rute sementara biar nggak error pas diklik menunya
+        Route::get('/validasi', function () { return inertia('expert/validasi/index'); })->name('validation.index');
+        Route::get('/riwayat', function () { return inertia('expert/riwayat/index'); })->name('history.index');
+        Route::get('/statistik', function () { return inertia('expert/stastistik/index'); })->name('statistics.index');
     });
 
-    // User Routes (Hanya Role User Biasa)
+    // User Routes
     Route::middleware(['role:user'])->prefix('user')->name('user.')->group(function () {
         Route::get('/observasi/buat', [ObservationController::class, 'create'])->name('observations.create');
         Route::get('/observasi/riwayat', [ObservationController::class, 'history'])->name('observations.history');

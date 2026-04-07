@@ -82,7 +82,7 @@ const Jelajah = () => {
                               .querySelector(".detail-btn")
                               ?.addEventListener("click", (ev: any) => { // Fix: Tambah tipe any
                                 ev.stopPropagation();
-                                router.get(`/detailSpesies/${obs.id}`);
+                                router.visit(`/detailSpesies/${obs.id}`);
                               });
                           }
                         },
@@ -103,7 +103,7 @@ const Jelajah = () => {
                       <Button 
                         size="sm" 
                         className="w-full mt-2 gap-2 cursor-pointer relative z-50 detail-btn" 
-                        onClick={() => { router.get(`/detailSpesies/${obs.id}`); }}
+                        onClick={() => { router.visit(`/detailSpesies/${obs.id}`); }}
                       >
                         Lihat Detail
                       </Button>
@@ -144,7 +144,7 @@ const Jelajah = () => {
                           <Button 
                             size="sm" 
                             className="w-full mt-2 gap-2" 
-                            onClick={() => router.get(`/detailSpesies/${obs.id}`)} 
+                            onClick={() => router.visit(`/detailSpesies/${obs.id}`)} 
                           >
                             Lihat Detail
                           </Button>
