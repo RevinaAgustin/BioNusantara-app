@@ -1,139 +1,162 @@
-import { Head, Link, usePage } from '@inertiajs/react';
-import { dashboard, login, register } from '@/routes';
+import { Link } from "@inertiajs/react"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { stats } from "@/lib/mock-data";
+import { Camera, Map, Users, Leaf, Search, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import AppLayout from '@/layouts/app-layout';
 
-export default function Welcome({
-    canRegister = true,
-}: {
-    canRegister?: boolean;
-}) {
-    const { auth } = usePage().props;
+const fadeUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6 },
+};
 
-    return (
-        <>
-            <Head title="BioNusantara">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link
-                    href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
-                    rel="stylesheet"
-                />
-            </Head>
-            <div className="flex min-h-screen flex-col bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a]">
-                {/* Header with Logo and Navigation */}
-                <header className="w-full border-b border-[#e3e3e0] px-6 py-4 dark:border-[#3E3E3A]">
-                    <div className="mx-auto flex max-w-7xl items-center justify-between">
-                        {/* Logo */}
-                        <Link href="/" className="text-2xl font-bold text-[#1b1b18] dark:text-[#EDEDEC]">
-                            BioNusantara
-                        </Link>
-
-                        {/* Navigation */}
-                        <nav className="flex items-center gap-6">
-                            <Link href="/" className="text-sm text-[#1b1b18] hover:text-[#f53003] dark:text-[#EDEDEC] dark:hover:text-[#FF4433]">
-                                Beranda
-                            </Link>
-                            <Link href="/jelajah" className="text-sm text-[#1b1b18] hover:text-[#f53003] dark:text-[#EDEDEC] dark:hover:text-[#FF4433]">
-                                Jelajah
-                            </Link>
-                            <Link href="/observasi" className="text-sm text-[#1b1b18] hover:text-[#f53003] dark:text-[#EDEDEC] dark:hover:text-[#FF4433]">
-                                Observasi
-                            </Link>
-                            {auth.user ? (
-                                <Link
-                                    href={dashboard()}
-                                    className="rounded-sm border border-[#19140035] px-5 py-1.5 text-sm text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                                >
-                                    Dashboard
-                                </Link>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={login()}
-                                        className="text-sm text-[#1b1b18] hover:text-[#f53003] dark:text-[#EDEDEC] dark:hover:text-[#FF4433]"
-                                    >
-                                        Log in
-                                    </Link>
-                                    {canRegister && (
-                                        <Link
-                                            href={register()}
-                                            className="rounded-sm border border-[#19140035] px-5 py-1.5 text-sm text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                                        >
-                                            Register
-                                        </Link>
-                                    )}
-                                </>
-                            )}
-                        </nav>
-                    </div>
-                </header>
-
-                {/* Hero Section */}
-                <main className="flex-1">
-                    <div className="mx-auto max-w-7xl px-6 py-16 lg:py-24">
-                        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-                            {/* Left Column - Text Content */}
-                            <div className="flex flex-col justify-center">
-                                <span className="mb-4 text-sm font-semibold text-[#f53003] dark:text-[#FF4433]">
-                                    Citizen Science Indonesia
-                                </span>
-                                <h1 className="mb-4 text-4xl font-bold leading-tight lg:text-5xl">
-                                    Jelajahi & Lindungi
-                                    <br />
-                                    Biodiversitas Nusantara
-                                </h1>
-                                <p className="mb-8 text-lg text-[#706f6c] dark:text-[#A1A09A]">
-                                    Bergabunglah dengan ribuan warga ilmuwan untuk mendokumentasikan kekayaan
-                                    hayati Indonesia. Setiap observasi Anda berkontribusi pada konservasi.
-                                </p>
-                                
-                                {/* CTA Buttons */}
-                                <div className="flex flex-wrap gap-4">
-                                    <Link
-                                        href="/kontribusi"
-                                        className="rounded-sm bg-[#f53003] px-6 py-3 text-sm font-medium text-white hover:bg-[#d42d03] dark:bg-[#FF4433] dark:hover:bg-[#d43a2b]"
-                                    >
-                                        Mulai Berkontribusi
-                                    </Link>
-                                    <Link
-                                        href="/peta"
-                                        className="rounded-sm border border-[#19140035] px-6 py-3 text-sm font-medium text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                                    >
-                                        Jelajahi Peta
-                                    </Link>
-                                </div>
-
-                                {/* Statistics Cards */}
-                                <div className="mt-12 grid grid-cols-3 gap-6">
-                                    <div className="text-center">
-                                        <div className="text-3xl font-bold text-[#1b1b18] dark:text-[#EDEDEC]">1,247</div>
-                                        <div className="text-sm text-[#706f6c] dark:text-[#A1A09A]">Total Observasi</div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-3xl font-bold text-[#1b1b18] dark:text-[#EDEDEC]">328</div>
-                                        <div className="text-sm text-[#706f6c] dark:text-[#A1A09A]">Spesies Teridentifikasi</div>
-                                    </div>
-                                    <div className="text-center">
-                                        <div className="text-3xl font-bold text-[#1b1b18] dark:text-[#EDEDEC]">562</div>
-                                        <div className="text-sm text-[#706f6c] dark:text-[#A1A09A]">Kontributor</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Right Column - Image/Illustration */}
-                            <div className="relative flex items-center justify-center lg:justify-end">
-                                <div className="relative aspect-square w-full max-w-md overflow-hidden rounded-lg bg-[#fff2f2] dark:bg-[#1D0002]">
-                                    {/* You can replace this with your illustration or image */}
-                                    <div className="flex h-full items-center justify-center">
-                                        <svg className="h-64 w-64 text-[#f53003] dark:text-[#FF4433]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                    </div>
-                                    <div className="absolute inset-0 rounded-lg shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d]" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </main>
+const welcome = () => {
+  return (
+    <AppLayout>
+      {/* Di sini gue pasang gradasinya di pembungkus paling luar biar nyatu semua */}
+      <div className="flex flex-col bg-linear-to-b from-emerald-light via-background to-amber-light/30">
+        
+        {/* Hero Section - Background gue buat transparan biar ikut pembungkus luar */}
+        <section className="relative overflow-hidden">
+        <div className="container mx-auto px-4 py-20 md:py-32">
+          <motion.div className="mx-auto max-w-3xl text-center" {...fadeUp}>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-background/60 px-4 py-1.5 text-sm font-medium backdrop-blur-sm">
+              <Leaf className="h-4 w-4 text-primary" />
+              Citizen Science Indonesia
             </div>
-        </>
-    );
-}
+            <h1 className="mb-6 text-4xl font-bold leading-tight md:text-6xl text-foreground">
+              Jelajahi & Lindungi{" "}
+              <span className="text-primary">Biodiversitas</span>{" "}
+              Nusantara
+            </h1>
+            <p className="mb-8 text-lg text-muted-foreground md:text-xl">
+              Bergabunglah dengan ribuan warga dan ilmuwan Indonesia untuk mendokumentasikan kekayaan hayati lokal. 
+              Setiap observasi Anda berkontribusi pada konservasi.
+            </p>
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <Link href="/observasi">
+                <Button size="lg" className="gap-2 text-base">
+                  <Camera className="h-5 w-5" />
+                  Mulai Berkontribusi
+                </Button>
+              </Link>
+              <Link href="/jelajah">
+                <Button size="lg" variant="outline" className="gap-2 text-base">
+                  <Map className="h-5 w-5" />
+                  Jelajahi Peta
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Stats Section - bg-card gue hapus biar nembus ke gradasi background */}
+      <section className="border-y border-white/10 py-12">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+          {/* Card Total Observasi */}
+          <div className="relative group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-xl">
+            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-2xl transition-all group-hover:bg-primary/20" />
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Observasi</p>
+            <div className="mt-2 flex items-baseline gap-2">
+              <h3 className="text-4xl font-bold tracking-tight text-foreground">1,234</h3>
+              <span className="text-xs font-medium text-green-500 bg-green-500/10 px-2 py-0.5 rounded-full">+12%</span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground italic">*Data terverifikasi</p>
+          </div>
+
+          {/* Card Total Spesies */}
+          <div className="relative group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-xl">
+            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-blue-500/10 blur-2xl transition-all group-hover:bg-blue-500/20" />
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Spesies</p>
+            <div className="mt-2 flex items-baseline gap-2">
+              <h3 className="text-4xl font-bold tracking-tight text-foreground">567</h3>
+              <span className="text-xs font-medium text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded-full">Baru</span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground italic">*Hoya, Kayu, Plankton</p>
+          </div>
+
+          {/* Card Kontributor */}
+          <div className="relative group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-xl">
+            <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-purple-500/10 blur-2xl transition-all group-hover:bg-purple-500/20" />
+            <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Kontributor aktif</p>
+            <div className="mt-2 flex items-baseline gap-2">
+              <h3 className="text-4xl font-bold tracking-tight text-foreground">89</h3>
+              <span className="text-xs font-medium text-purple-500 bg-purple-500/10 px-2 py-0.5 rounded-full">Pakar & Umum</span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground italic">*Komunitas BioNusantara</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Cara Kerja Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="mb-12 text-center">
+            <h2 className="mb-3 text-3xl font-bold text-foreground">Bagaimana Cara Kerjanya?</h2>
+            <p className="text-muted-foreground">Tiga langkah sederhana untuk berkontribusi</p>
+          </div>
+          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 md:grid-cols-3">
+            {[
+              {
+                step: "1",
+                title: "Temukan & Foto",
+                desc: "Temukan flora atau fauna di sekitar Anda dan ambil fotonya.",
+                icon: Camera,
+                color: "bg-emerald-500/20 text-emerald-600",
+              },
+              {
+                step: "2",
+                title: "Upload & Identifikasi",
+                desc: "Upload foto Anda. AI kami akan membantu mengidentifikasi spesiesnya.",
+                icon: Search,
+                color: "bg-amber-500/20 text-amber-600",
+              },
+              {
+                step: "3",
+                title: "Validasi & Publikasi",
+                desc: "Observasi divalidasi lalu tampil di peta dan galeri publik.",
+                icon: CheckCircle,
+                color: "bg-blue-500/20 text-blue-600",
+              },
+            ].map((step, i) => (
+              <motion.div
+                key={step.step}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + i * 0.15, duration: 0.5 }}
+              >
+                <Card className="relative overflow-hidden border-white/20 bg-white/5 backdrop-blur-sm shadow-md hover:bg-white/10 transition-all">
+                  <CardContent className="flex flex-col items-center p-8 text-center">
+                    <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${step.color}`}>
+                      <step.icon className="h-7 w-7" />
+                    </div>
+                    <h3 className="mb-2 text-xl font-bold font-sans text-foreground">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground">{step.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - bg-card dihapus juga */}
+      <footer className="border-t border-white/10 py-8">
+        <div className="container mx-auto flex flex-col items-center gap-2 px-4 text-center text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 font-medium text-foreground">
+            <Leaf className="h-4 w-4 text-primary" />
+            BioNusantara
+          </div>
+          <p>© 2026 Platform citizen science untuk biodiversitas Indonesia</p>
+        </div>
+      </footer>
+    </div>
+    </AppLayout>
+  );
+};
+
+export default welcome;
