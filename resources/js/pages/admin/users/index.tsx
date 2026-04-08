@@ -1,6 +1,5 @@
 import { Head, useForm, router } from '@inertiajs/react';
-
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 
 import {
     Users,
@@ -69,7 +68,7 @@ export default function UserIndex({ users }: any) {
 
     if (!users) {
         return (
-            <AppLayout
+            <DashboardLayout
                 breadcrumbs={[
                     { title: 'Manajemen User', href: '/admin/users' },
                 ]}
@@ -81,12 +80,12 @@ export default function UserIndex({ users }: any) {
                         Data users tidak tersedia
                     </div>
                 </div>
-            </AppLayout>
+            </DashboardLayout>
         );
     }
 
     return (
-        <AppLayout
+        <DashboardLayout
             breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}
         >
             <Head title="Manajemen User" />
@@ -269,6 +268,6 @@ export default function UserIndex({ users }: any) {
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

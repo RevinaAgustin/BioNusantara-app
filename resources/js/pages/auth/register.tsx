@@ -26,7 +26,7 @@ export default function Register() {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Nama</Label>
+                                <Label htmlFor="name">Nama Pengguna</Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -35,7 +35,7 @@ export default function Register() {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Masukan Nama Lengkap"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -82,7 +82,7 @@ export default function Register() {
                                     tabIndex={4}
                                     autoComplete="new-password"
                                     name="password_confirmation"
-                                    placeholder="Confirm password"
+                                    placeholder="Konfirmasi password"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}

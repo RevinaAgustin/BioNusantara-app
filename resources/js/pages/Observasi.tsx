@@ -211,7 +211,7 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-semibold text-sm text-destructive">⚠️ Atur Lokasi Manual</h4>
                 </div>
-                <div className="h-[250px] w-full rounded-md overflow-hidden border border-border" style={{ zIndex: 0 }}>
+                <div className="h-62.5 w-full rounded-md overflow-hidden border border-border" style={{ zIndex: 0 }}>
                   <MapContainer center={mapPosition || defaultCenter} zoom={mapPosition ? 13 : 4} style={{ height: "100%", width: "100%", zIndex: 0 }}>
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <LocationPicker position={mapPosition} setPosition={setMapPosition} setFormData={setFormData} />

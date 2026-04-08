@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import type { BreadcrumbItem } from '@/types';
 import { CheckCircle, Clock, MapPin, Eye, Check, X, Info, Inbox } from 'lucide-react';
 import { useState } from 'react';
@@ -29,7 +29,7 @@ export default function Verifications({ pendingObservations }: any) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
             <Head title="Verifikasi Observasi" />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex flex-col gap-1">
@@ -44,7 +44,7 @@ export default function Verifications({ pendingObservations }: any) {
 
                 {/* KONDISI JIKA DATA KOSONG */}
                 {pendingObservations?.length === 0 ? (
-                    <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-sidebar-border bg-white p-12 text-center dark:bg-neutral-900">
+                    <div className="flex min-h-100 flex-col items-center justify-center rounded-3xl border border-dashed border-sidebar-border bg-white p-12 text-center dark:bg-neutral-900">
                         <div className="mb-4 rounded-full bg-neutral-50 p-4 dark:bg-neutral-800">
                             <Inbox className="h-12 w-12 text-neutral-300" />
                         </div>
@@ -131,6 +131,6 @@ export default function Verifications({ pendingObservations }: any) {
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

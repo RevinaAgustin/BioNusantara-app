@@ -1,14 +1,23 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
+import { History, CheckCircle, AlertCircle, Camera } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
-import { Camera, CheckCircle, AlertCircle, History } from 'lucide-react';
 
-const breadcrumbs: BreadcrumbItem[] = [{ title: 'My Dashboard', href: '/dashboard' }];
+interface DashboardProps {
+    user_stats: {
+        my_total_uploads: number;
+        my_verified: number;
+        my_rejected: number;
+    };
+    my_recent_uploads: any[];
+}
 
-export default function Dashboard({ user_stats }: any) {
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Dashboard', href: '/dashboard' }];
+
+export default function Dashboard({ user_stats, my_recent_uploads }: DashboardProps) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard User" />
+        <DashboardLayout breadcrumbs={breadcrumbs}>
+            <Head title="My Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 p-4">
                 {/* Ringkasan Statistik */}
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -55,6 +64,6 @@ export default function Dashboard({ user_stats }: any) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

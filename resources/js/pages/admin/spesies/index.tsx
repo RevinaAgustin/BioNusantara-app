@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Leaf, Plus, Search } from 'lucide-react';
 
@@ -7,7 +7,7 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Manajemen Spesies', href: '/adm
 
 export default function SpeciesIndex({ species }: any) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
             <Head title="Manajemen Spesies" />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex items-center justify-between">
@@ -33,6 +33,6 @@ export default function SpeciesIndex({ species }: any) {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

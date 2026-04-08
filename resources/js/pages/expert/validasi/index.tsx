@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import type { BreadcrumbItem } from '@/types';
 import { Shield, Leaf, Search, BookOpen, Microscope, Info } from 'lucide-react';
 import { useState } from 'react';
@@ -15,7 +15,7 @@ export default function Validasi({ species_references }: any) {
     );
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
             <Head title="Validasi Spesies" />
             <div className="flex flex-col gap-6 p-6">
                 {/* Header Section */}
@@ -61,7 +61,7 @@ export default function Validasi({ species_references }: any) {
                                         {s.scientific_name}
                                     </h3>
                                     
-                                    <div className="mt-4 space-y-2 flex-grow">
+                                    <div className="mt-4 space-y-2 grow">
                                         <div className="flex gap-2 text-xs text-neutral-500">
                                             <Microscope className="w-4 h-4 shrink-0" />
                                             <p className="line-clamp-2">Kunci Identifikasi: Fokus pada struktur morfologi {s.category.toLowerCase()}.</p>
@@ -86,6 +86,6 @@ export default function Validasi({ species_references }: any) {
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }

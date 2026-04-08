@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import type { BreadcrumbItem } from '@/types';
 import {
     BarChart,
@@ -15,7 +15,7 @@ const breadcrumbs: BreadcrumbItem[] = [{ title: 'Statistik', href: '/expert/stat
 
 export default function Statistik({ statistics, distribution, monthlyTrend }: any) {
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
             <Head title="Statistik Pakar" />
             <div className="flex flex-col gap-8 p-6">
                 <div className="flex flex-col gap-1">
@@ -102,7 +102,7 @@ export default function Statistik({ statistics, distribution, monthlyTrend }: an
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }
 

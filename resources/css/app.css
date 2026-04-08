@@ -2,7 +2,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* --- PERBAIKAN: @source diletakkan di luar (Top Level) --- */
 @source "../views";
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 
@@ -42,14 +41,22 @@
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
-  /* Animasi */
-  @keyframes logo-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+  /* Sidebar Specific Mapping (PENTING) */
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  /* Radius */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-/* --- Variabel Warna HSL --- */
 :root {
   --background: 140 20% 98%;
   --foreground: 150 30% 10%;
@@ -79,6 +86,7 @@
   --terra: 25 90% 55%;
   --terra-light: 25 80% 93%;
 
+  /* Sidebar Variables (HSL Values) */
   --sidebar-background: 150 20% 97%;
   --sidebar-foreground: 150 30% 10%;
   --sidebar-primary: 152 55% 33%;
@@ -110,12 +118,14 @@
   --input: 150 15% 18%;
   --ring: 152 55% 45%;
 
-  --emerald: 152 55% 45%;
-  --emerald-light: 152 30% 15%;
-  --amber: 45 60% 45%;
-  --amber-light: 45 40% 15%;
-  --terra: 25 80% 50%;
-  --terra-light: 25 50% 15%;
+  --sidebar-background: 150 20% 9%;
+  --sidebar-foreground: 140 15% 95%;
+  --sidebar-primary: 152 55% 45%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 150 15% 15%;
+  --sidebar-accent-foreground: 140 15% 95%;
+  --sidebar-border: 150 15% 18%;
+  --sidebar-ring: 152 55% 45%;
 }
 
 @layer base {
@@ -129,15 +139,4 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
   }
-}
-
-/* --- Utilities --- */
-.logo-animate {
-  @media (prefers-reduced-motion: no-preference) {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.hero-gradient {
-  background: linear-gradient(135deg, hsl(var(--emerald-light)) 0%, hsl(var(--background)) 50%, hsl(var(--amber-light)) 100%);
 }

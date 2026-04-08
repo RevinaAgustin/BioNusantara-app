@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import type { BreadcrumbItem } from '@/types';
 import { FileText, CheckCircle2, XCircle, Search, Calendar, User, Tag } from 'lucide-react';
 import { useState } from 'react';
@@ -15,7 +15,7 @@ export default function Riwayat({ verifications }: any) {
     );
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
             <Head title="Riwayat Verifikasi" />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -100,6 +100,6 @@ export default function Riwayat({ verifications }: any) {
                     )}
                 </div>
             </div>
-        </AppLayout>
+        </DashboardLayout>
     );
 }
