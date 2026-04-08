@@ -161,7 +161,7 @@ export default function DetailSpesies() {
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="p-0 relative">
-                                <div className="h-[280px] w-full relative isolate" style={{ zIndex: 0 }}>
+                                <div className="h-70 w-full relative isolate" style={{ zIndex: 0 }}>
                                     <MapContainer
                                         center={[Number(observation.latitude), Number(observation.longitude)]}
                                         zoom={10}
