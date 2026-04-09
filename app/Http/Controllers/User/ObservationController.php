@@ -39,7 +39,7 @@ class ObservationController extends Controller
      {
          $userId = Auth::id();
  
-         return Inertia::render('user/history', [
+         return Inertia::render('history', [
              'observations' => Observation::with(['photos', 'species'])
                  ->where('user_id', $userId)
                  ->whereIn('status', ['draft', 'pending', 'rejected'])
@@ -52,7 +52,7 @@ class ObservationController extends Controller
      {
          $userId = Auth::id();
  
-         return Inertia::render('user/contributions', [
+         return Inertia::render('contributions', [
              'observations' => Observation::with(['photos', 'species', 'verification'])
                  ->where('user_id', $userId)
                  ->where('status', 'verified')
