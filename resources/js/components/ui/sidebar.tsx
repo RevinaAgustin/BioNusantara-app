@@ -184,7 +184,7 @@ const Sidebar = React.forwardRef<
             : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]",
           "group-data-[state=collapsed]:w-[--sidebar-width-icon]",
           variant === "floating" || variant === "inset"
-            ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
+            ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[side=left]:border-r group-data-[side=right]:border-l"
         )}
       >
@@ -261,7 +261,7 @@ const SidebarInset = React.forwardRef<HTMLDivElement, React.ComponentProps<"main
       // Gunakan min-w-0 supaya konten flex-nya nggak meluber/overflow
       className={cn(
         "relative flex min-h-svh flex-1 flex-col bg-background min-w-0",
-        "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
+        "peer-data-[variant=inset]:min-h-[calc(100svh-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
         className
       )}
       {...props}

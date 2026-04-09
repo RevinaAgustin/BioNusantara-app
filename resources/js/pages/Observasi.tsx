@@ -1,4 +1,7 @@
+/* Import Core & UI Components */
 import { useState, useCallback } from "react";
+import { Head } from '@inertiajs/react';
+import DashboardLayout from '@/layouts/dashboard-layout';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,7 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Camera, Upload, MapPin, Sparkles, Loader2, Save, Navigation } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
+import type { BreadcrumbItem } from '@/types';
+
+/* Leaflet & EXIF Configuration */
 import exifr from "exifr";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -19,6 +25,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
+/* Helper Components */
 const LocationPicker = ({ position, setPosition, setFormData }: any) => {
   const map = useMapEvents({
     click(e) {
@@ -34,16 +41,19 @@ const LocationPicker = ({ position, setPosition, setFormData }: any) => {
   return position ? <Marker position={position} /> : null;
 };
 
+/* Main Component */
+const breadcrumbs: BreadcrumbItem[] = [
+  { title: 'Dashboard', href: '/dashboard' },
+  { title: 'Buat Observasi', href: '/user/observasi/buat' }
+];
+
 const Observasi = () => {
   const { toast } = useToast();
   const [photo, setPhoto] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  
   const [mapPosition, setMapPosition] = useState<L.LatLng | null>(null);
   const defaultCenter: [number, number] = [-6.200000, 106.816666];
-
   const [showManualLocation, setShowManualLocation] = useState(false);
-
   const [formData, setFormData] = useState({
     speciesName: "",
     scientificName: "",
@@ -55,7 +65,7 @@ const Observasi = () => {
   });
   const [aiSuggestion, setAiSuggestion] = useState<string | null>(null);
 
-const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -64,7 +74,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
     reader.readAsDataURL(file);
 
     setLoading(true);
-
     const isImageValid = Math.random() > 0.2; 
 
     setTimeout(async () => {
@@ -113,7 +122,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
         scientificName: randomSpecies.scientific,
       }));
       setLoading(false);
-      
     }, 1500);
   }, [toast]);
 
@@ -146,106 +154,111 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
   };
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8">
-      <h1 className="mb-2 text-3xl font-bold">Form Observasi</h1>
-      <p className="mb-6 text-muted-foreground">Dokumentasikan temuan biodiversitas Anda</p>
+    <DashboardLayout breadcrumbs={breadcrumbs}>
+      <Head title="Buat Observasi" />
+      <div className="container mx-auto max-w-2xl px-4 py-8">
+        <h1 className="mb-2 text-3xl font-bold font-sans">Form Observasi</h1>
+        <p className="mb-6 text-muted-foreground">Dokumentasikan temuan biodiversitas Anda</p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-sans">
-              <Camera className="h-5 w-5" /> Upload Foto
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {photo ? (
-              <div className="relative">
-                <img src={photo} alt="Preview" className="w-full rounded-lg object-cover" style={{ maxHeight: 300 }} />
-                <Button type="button" variant="secondary" size="sm" className="absolute bottom-2 right-2" onClick={() => setPhoto(null)}>Ganti Foto</Button>
-              </div>
-            ) : (
-              <label className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed p-10 transition-colors hover:border-primary hover:bg-muted">
-                <Upload className="h-10 w-10 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Klik atau seret foto ke sini</span>
-                <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
-              </label>
-            )}
-
-            {loading && (
-              <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="h-4 w-4 animate-spin" /> AI sedang mengidentifikasi spesies...
-              </div>
-            )}
-
-            {aiSuggestion && !loading && (
-              <div className="mt-4 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-secondary" />
-                <span className="text-sm">Saran AI:</span>
-                <Badge variant="secondary">{aiSuggestion}</Badge>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-sans">Informasi Spesies</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div><Label>Nama Umum</Label><Input value={formData.speciesName} onChange={(e) => setFormData({ ...formData, speciesName: e.target.value })} /></div>
-              <div><Label>Nama Ilmiah</Label><Input value={formData.scientificName} onChange={(e) => setFormData({ ...formData, scientificName: e.target.value })} className="italic" /></div>
-            </div>
-            <div><Label>Habitat</Label><Input value={formData.habitat} onChange={(e) => setFormData({ ...formData, habitat: e.target.value })} /></div>
-            <div><Label>Catatan Observasi</Label><Textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} /></div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-lg font-sans">
-              <MapPin className="h-5 w-5" /> Lokasi Peta & Koordinat
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {showManualLocation && (
-              <div className="space-y-3 bg-muted/30 p-4 rounded-lg border border-border">
-                <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-semibold text-sm text-destructive">⚠️ Atur Lokasi Manual</h4>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg font-sans">
+                <Camera className="h-5 w-5" /> Upload Foto
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {photo ? (
+                <div className="relative">
+                  <img src={photo} alt="Preview" className="w-full rounded-lg object-cover" style={{ maxHeight: 300 }} />
+                  <Button type="button" variant="secondary" size="sm" className="absolute bottom-2 right-2" onClick={() => setPhoto(null)}>Ganti Foto</Button>
                 </div>
-                <div className="h-62.5 w-full rounded-md overflow-hidden border border-border" style={{ zIndex: 0 }}>
-                  <MapContainer center={mapPosition || defaultCenter} zoom={mapPosition ? 13 : 4} style={{ height: "100%", width: "100%", zIndex: 0 }}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <LocationPicker position={mapPosition} setPosition={setMapPosition} setFormData={setFormData} />
-                  </MapContainer>
+              ) : (
+                <label className="flex cursor-pointer flex-col items-center gap-3 rounded-lg border-2 border-dashed p-10 transition-colors hover:border-primary hover:bg-muted">
+                  <Upload className="h-10 w-10 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Klik atau seret foto ke sini</span>
+                  <input type="file" accept="image/*" className="hidden" onChange={handlePhotoUpload} />
+                </label>
+              )}
+
+              {loading && (
+                <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="h-4 w-4 animate-spin" /> AI sedang mengidentifikasi spesies...
                 </div>
-                <Button type="button" variant="secondary" className="w-full gap-2 mt-2" onClick={handleCurrentLocation}>
-                  <Navigation className="h-4 w-4" /> Gunakan Lokasi Saat Ini
-                </Button>
-              </div>
-            )}
+              )}
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              <div>
-                <Label>Latitude</Label>
-                <Input value={formData.latitude} readOnly placeholder="-6.200" className="bg-muted" />
-              </div>
-              <div>
-                <Label>Longitude</Label>
-                <Input value={formData.longitude} readOnly placeholder="106.816" className="bg-muted" />
-              </div>
-              <div>
-                <Label>Tanggal</Label>
-                <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              {aiSuggestion && !loading && (
+                <div className="mt-4 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-secondary" />
+                  <span className="text-sm">Saran AI:</span>
+                  <Badge variant="secondary">{aiSuggestion}</Badge>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-        <div className="flex flex-col gap-4 sm:flex-row mt-6">
-          <Button type="submit" size="lg" className="flex-1 gap-2"><Upload className="h-5 w-5" /> Kirim Observasi</Button>
-          <Button type="button" variant="outline" size="lg" className="flex-1 gap-2"><Save className="h-5 w-5" /> Simpan sebagai Draft</Button>
-        </div>
-      </form>
-    </div>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-sans">Informasi Spesies</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div><Label>Nama Umum</Label><Input value={formData.speciesName} onChange={(e) => setFormData({ ...formData, speciesName: e.target.value })} /></div>
+                <div><Label>Nama Ilmiah</Label><Input value={formData.scientificName} onChange={(e) => setFormData({ ...formData, scientificName: e.target.value })} className="italic" /></div>
+              </div>
+              <div><Label>Habitat</Label><Input value={formData.habitat} onChange={(e) => setFormData({ ...formData, habitat: e.target.value })} /></div>
+              <div><Label>Catatan Observasi</Label><Textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} /></div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-lg font-sans">
+                <MapPin className="h-5 w-5" /> Lokasi Peta & Koordinat
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {showManualLocation && (
+                <div className="space-y-3 bg-muted/30 p-4 rounded-lg border border-border">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-semibold text-sm text-destructive">⚠️ Atur Lokasi Manual</h4>
+                  </div>
+                  <div className="h-62.5 w-full rounded-md overflow-hidden border border-border" style={{ zIndex: 0 }}>
+                    <MapContainer center={mapPosition || defaultCenter} zoom={mapPosition ? 13 : 4} style={{ height: "100%", width: "100%", zIndex: 0 }}>
+                      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                      <LocationPicker position={mapPosition} setPosition={setMapPosition} setFormData={setFormData} />
+                    </MapContainer>
+                  </div>
+                  <Button type="button" variant="secondary" className="w-full gap-2 mt-2" onClick={handleCurrentLocation}>
+                    <Navigation className="h-4 w-4" /> Gunakan Lokasi Saat Ini
+                  </Button>
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div>
+                  <Label>Latitude</Label>
+                  <Input value={formData.latitude} readOnly placeholder="-6.200" className="bg-muted" />
+                </div>
+                <div>
+                  <Label>Longitude</Label>
+                  <Input value={formData.longitude} readOnly placeholder="106.816" className="bg-muted" />
+                </div>
+                <div>
+                  <Label>Tanggal</Label>
+                  <Input type="date" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex flex-col gap-4 sm:flex-row mt-6">
+            <Button type="submit" size="lg" className="flex-1 gap-2"><Upload className="h-5 w-5" /> Kirim Observasi</Button>
+            <Button type="button" variant="outline" size="lg" className="flex-1 gap-2"><Save className="h-5 w-5" /> Simpan sebagai Draft</Button>
+          </div>
+        </form>
+      </div>
+    </DashboardLayout>
   );
 };
 

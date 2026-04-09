@@ -39,7 +39,7 @@ class ObservationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('User/Observation/Create', [
+        return Inertia::render('observasi', [
             'speciesList' => Species::select('id', 'scientific_name', 'category')->get(),
         ]);
     }

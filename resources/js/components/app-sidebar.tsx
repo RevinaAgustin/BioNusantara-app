@@ -50,7 +50,6 @@ export function AppSidebar() {
             items.push(
                 { title: 'Manajemen User', href: '/admin/users', icon: Users },
                 { title: 'Manajemen Spesies', href: '/admin/spesies', icon: Leaf },
-                // Pastikan HREF ini sesuai dengan name route di web.php
                 { title: 'Verifikasi Ahli', href: '/admin/verifikasi-ahli', icon: Award },
                 { title: 'Laporan', href: '/admin/laporan', icon: BarChart },
             );
@@ -74,12 +73,6 @@ export function AppSidebar() {
                 { title: 'Kontribusi Saya', href: '/user/kontribusi', icon: Award },
             );
         }
-
-        // Shared
-        items.push(
-            { title: 'Jelajah Spesies', href: '/jelajah', icon: Leaf },
-            { title: 'Peta Biodiversitas', href: '/peta', icon: Map }
-        );
 
         return items;
     };
