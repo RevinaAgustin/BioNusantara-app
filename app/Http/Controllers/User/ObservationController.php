@@ -44,9 +44,32 @@ class ObservationController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created observation in storage.
-     */
+    public function history()
+     {
+         $userId = Auth::id();
+ 
+         return Inertia::render('user/history', [
+             'observations' => Observation::with(['photos', 'species'])
+                 ->where('user_id', $userId)
+                 ->whereIn('status', ['draft', 'pending', 'rejected'])
+                 ->latest()
+                 ->get(),
+         ]);
+     }
+
+     public function contributions()
+     {
+         $userId = Auth::id();
+ 
+         return Inertia::render('user/contributions', [
+             'observations' => Observation::with(['photos', 'species', 'verification'])
+                 ->where('user_id', $userId)
+                 ->where('status', 'verified')
+                 ->latest()
+                 ->get(),
+         ]);
+     }
+    
     public function store(Request $request)
     {
         $request->validate([

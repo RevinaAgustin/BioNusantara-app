@@ -70,11 +70,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:user'])->prefix('user')->name('user.')->group(function () {
         Route::get('/observasi/buat', [ObservationController::class, 'create'])->name('observations.create');
         Route::get('/observasi/riwayat', [ObservationController::class, 'history'])->name('observations.history');
-        Route::get('/kontribusi', function () {
-            return inertia('user/contributions');
-        })->name('contributions');
+        Route::get('/kontribusi', [ObservationController::class, 'contributions'])->name('contributions');
+    });
     });
 
-});
 
 require __DIR__.'/settings.php';
