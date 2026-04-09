@@ -12,16 +12,7 @@ use Inertia\Inertia;
 
 class ObservationController extends Controller
 {
-    protected $observationService;
 
-    public function __construct(ObservationService $service)
-    {
-        $this->observationService = $service;
-    }
-
-    /**
-     * Display a listing of the user's observations.
-     */
     public function index()
     {
         $userId = Auth::id();
@@ -70,7 +61,7 @@ class ObservationController extends Controller
          ]);
      }
     
-    public function store(Request $request)
+    public function store(Request $request, ObservationService $observationService)
     {
         $request->validate([
             'latitude' => 'required|numeric',
@@ -83,7 +74,7 @@ class ObservationController extends Controller
 
         try {
             // Memanggil service untuk menangani Database Transaction & Upload Foto
-            $this->observationService->store($request->all(), Auth::id());
+            $observationService->store($request->all(), Auth::id());
 
             return redirect()
                 ->route('observations.index')
@@ -115,7 +106,7 @@ class ObservationController extends Controller
     /**
      * Remove the specified observation from storage.
      */
-    public function destroy(Observation $observation)
+    public function destroy(Observation $observation, ObservationService $observationService)
     {
         // Pastikan hanya pemilik yang bisa hapus dan data masih 'pending'
         if (! $this->isOwner($observation) || $observation->status !== 'pending') {
@@ -124,7 +115,7 @@ class ObservationController extends Controller
 
         try {
             // Gunakan service agar file di folder storage juga terhapus
-            $this->observationService->delete($observation);
+            $observationService->delete($observation);
 
             return redirect()
                 ->route('observations.index')
@@ -156,7 +147,7 @@ class ObservationController extends Controller
     /**
      * Update the specified observation in storage.
      */
-    public function update(Request $request, Observation $observation)
+    public function update(Request $request, Observation $observation, ObservationService $observationService)
     {
         // Pastikan hanya pemilik yang bisa update dan data masih 'pending'
         if (! $this->isOwner($observation) || $observation->status !== 'pending') {
@@ -184,11 +175,11 @@ class ObservationController extends Controller
             if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
                 // Delete old photos first
                 foreach ($observation->photos as $photo) {
-                    $this->observationService->deletePhoto($photo);
+                    $observationService->deletePhoto($photo);
                 }
 
                 // Upload new photo
-                $this->observationService->uploadPhoto($request->file('photo'), $observation->id);
+                $observationService->uploadPhoto($request->file('photo'), $observation->id);
             }
 
             return redirect()

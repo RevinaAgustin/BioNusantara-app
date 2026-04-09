@@ -3,6 +3,7 @@ import {AppSidebarHeader} from '@/components/app-sidebar-header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { BreadcrumbItem } from '@/types';
 import React from 'react';
+import { Toaster } from '@/components/ui/toaster';
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function DashboardLayout({ children, breadcrumbs = [] }: Dashboar
                     {children}
                 </main>
             </SidebarInset>
+            <Toaster />
         </SidebarProvider>
     );
 }
