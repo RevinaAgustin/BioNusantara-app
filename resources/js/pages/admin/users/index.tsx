@@ -137,29 +137,31 @@ export default function UserIndex({ users }: any) {
                                         </td>
 
                                         <td className="px-6 py-4">
-                                            {u.email_verified_at ? (
-                                                <span className="flex items-center gap-1 font-bold text-green-600">
-                                                    <CheckCircle className="h-3 w-3" />{' '}
-                                                    AKTIF
-                                                </span>
-                                            ) : (
-                                                <span className="flex items-center gap-1 font-bold text-red-500">
-                                                    <ShieldAlert className="h-3 w-3" />{' '}
-                                                    NONAKTIF
-                                                </span>
-                                            )}
-                                        </td>
+                                            {u.is_active ? (
+                                            <span className="flex items-center gap-1 font-bold text-green-600">
+                                                <CheckCircle className="h-3 w-3" />{' '}
+                                                AKTIF
+                                            </span>
+                                        ) : (
+                                            <span className="flex items-center gap-1 font-bold text-red-500">
+                                                <ShieldAlert className="h-3 w-3" />{' '}
+                                                NONAKTIF
+                                            </span>
+                                        )}
+                                    </td>
 
                                         <td className="space-x-2 px-6 py-4 text-right">
-                                            <button
-                                                onClick={() =>
-                                                    handleToggleStatus(u.id)
-                                                }
-                                                className="rounded-lg p-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
-                                                title="Toggle Status"
-                                            >
-                                                <Ban className="h-4 w-4" />
-                                            </button>
+                                        <button
+                                            onClick={() => handleToggleStatus(u.id)}
+                                            className={`rounded-lg p-2 transition-colors ${
+                                                !u.is_active 
+                                                ? 'text-red-600 bg-red-50 hover:bg-red-100' 
+                                                : 'text-neutral-600 hover:bg-neutral-100'
+                                            }`}
+                                            title={u.is_active ? "Nonaktifkan Akun" : "Aktifkan Akun"}
+                                        >
+                                            <Ban className="h-4 w-4" />
+                                        </button>
 
                                             <button
                                                 onClick={() => {

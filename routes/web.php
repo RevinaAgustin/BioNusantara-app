@@ -19,7 +19,7 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::get('/jelajah', function () {
-    return inertia('Jelajah'); 
+    return inertia('jelajah'); 
 })->name('explore');
 
 Route::get('/peta', function () {

@@ -16,12 +16,16 @@ class SpeciesController extends Controller
         $this->speciesService = $service;
     }
 
-    public function index()
-    {
-        return Inertia::render('admin/spesies/index', [
-            'species' => $this->speciesService->getAllSpecies(),
-        ]);
-    }
+public function index(Request $request)
+{
+    return Inertia::render('admin/spesies/index', [
+        'species' => $this->speciesService->getAllSpecies(
+            $request->search, 
+            $request->category
+        ),
+        'filters' => $request->only(['search', 'category']),
+    ]);
+}
 
     public function store(Request $request)
     {
