@@ -13,7 +13,7 @@ class VerificationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('expert/verifications/index', [
+        return Inertia::render('expert/verifikasi/index', [
             'pendingObservations' => Observation::with(['user', 'photos', 'species'])
                 ->where('status', 'pending')
                 ->latest()

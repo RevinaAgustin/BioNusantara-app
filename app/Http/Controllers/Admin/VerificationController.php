@@ -11,14 +11,13 @@ class VerificationController extends Controller
 {
     public function index(Request $request)
     {
-        // Menampilkan daftar User dengan role 'expert' yang menunggu verifikasi admin
-        $experts = User::where('role', 'expert') // Atau role_id sesuai database kamu
+        $experts = User::where('role', 'expert')
             ->when($request->search, function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
             ->paginate(10);
 
-        return Inertia::render('admin/verifications/index', [
+        return Inertia::render('admin/verifikasi/index', [
             'experts' => $experts,
         ]);
     }
@@ -29,7 +28,6 @@ class VerificationController extends Controller
             'status' => 'required|in:verified,rejected',
         ]);
 
-        // Admin memverifikasi apakah akun ini layak jadi Expert
         $expert->update([
             'expert_verified_at' => $request->status === 'verified' ? now() : null,
         ]);
