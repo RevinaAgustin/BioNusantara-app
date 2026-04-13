@@ -6,11 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { mockObservations, mockSpecies } from "@/lib/mock-data";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Map, Grid3X3, Search, Filter, ArrowLeft } from "lucide-react";
-import { Link, router } from "@inertiajs/react"; // Ganti: Pakai router bawaan Inertia
+import { Link, router } from "@inertiajs/react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Button } from "@/components/ui/button";
-import AppLayout from "@/layouts/app-layout"; // Tambah: Biar Navbar muncul
+import AppLayout from "@/layouts/app-layout";
+import { useEffect } from "react";
 
 // Fix icon leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -43,13 +44,37 @@ const Jelajah = () => {
     ? validated.filter(obs => obs.speciesName === selectedSpecies)
     : [];
 
-  return (
+const Jelajah = () => {
+  // 1. Ambil parameter tab dari URL saat ini
+  const queryParams = new URLSearchParams(window.location.search);
+  const initialTab = queryParams.get('tab') || "peta"; // Default ke peta kalau gak ada parameter
+
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedSpecies, setSelectedSpecies] = useState<string | null>(null);
+  
+  // 2. State untuk mengontrol tab yang aktif
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // 3. Logic agar tab sinkron kalau user klik tombol navigasi browser (Back/Forward)
+  useEffect(() => {
+    const tabFromUrl = new URLSearchParams(window.location.search).get('tab');
+    if (tabFromUrl) {
+      setActiveTab(tabFromUrl);
+    }
+  }, []);
+
+return (
     <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <h1 className="mb-2 text-3xl font-bold">Jelajah Biodiversitas</h1>
         <p className="mb-6 text-muted-foreground">Eksplorasi observasi yang sudah divalidasi</p>
 
-        <Tabs defaultValue="peta" className="space-y-4">
+        <Tabs 
+          value={activeTab} 
+          onValueChange={setActiveTab} 
+          className="space-y-4"
+        >
           <TabsList>
             <TabsTrigger value="peta" className="gap-2">
               <Map className="h-4 w-4" /> Peta Interaktif
@@ -243,5 +268,6 @@ const Jelajah = () => {
     </AppLayout>
   );
 };
+}
 
 export default Jelajah;

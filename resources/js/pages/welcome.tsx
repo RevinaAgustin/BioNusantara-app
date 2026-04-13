@@ -30,13 +30,15 @@ const Welcome = () => {
                 Bergabunglah dengan ribuan warga dan ilmuwan Indonesia untuk mendokumentasikan kekayaan hayati lokal. 
                 Setiap observasi Anda berkontribusi pada konservasi.
               </p>
+
               <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-                <Link href="/observasi">
+                <Link href="/jelajah?tab=galeri">
                   <Button size="lg" className="gap-2 text-base">
-                    <Camera className="h-5 w-5" /> Mulai Berkontribusi
+                    <Camera className="h-5 w-5" /> Lihat Galeri Spesies Kami!
                   </Button>
                 </Link>
-                <Link href="/jelajah">
+
+                <Link href="/jelajah?tab=peta">
                   <Button size="lg" variant="outline" className="gap-2 text-base">
                     <Map className="h-5 w-5" /> Jelajahi Peta
                   </Button>

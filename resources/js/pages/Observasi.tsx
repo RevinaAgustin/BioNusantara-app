@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Camera, Upload, MapPin, Sparkles, Loader2, Save, Navigation } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import type { BreadcrumbItem } from '@/types';
+import { router } from '@inertiajs/react';
 
 /* Leaflet & EXIF Configuration */
 import exifr from "exifr";
