@@ -19,11 +19,11 @@ Route::inertia('/', 'welcome', [
 ])->name('home');
 
 Route::get('/jelajah', function () {
-    return inertia('jelajah'); 
+    return inertia('Jelajah'); 
 })->name('explore');
 
 Route::get('/peta', function () {
-    return inertia('map');
+    return inertia('Map');
 })->name('map');
 
 Route::get('/detailSpesies/{id}', function ($id) {

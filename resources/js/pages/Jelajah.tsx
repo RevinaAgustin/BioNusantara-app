@@ -1,80 +1,99 @@
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { mockObservations, mockSpecies } from "@/lib/mock-data";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Map, Grid3X3, Search, Filter, ArrowLeft } from "lucide-react";
-import { Link, router } from "@inertiajs/react";
-import "leaflet/dist/leaflet.css";
+import { router } from "@inertiajs/react";
 import L from "leaflet";
-import { Button } from "@/components/ui/button";
-import AppLayout from "@/layouts/app-layout";
-import { useEffect } from "react";
+import "leaflet/dist/leaflet.css";
+import { ArrowLeft, Filter, Grid3X3, Map, Search } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-// Fix icon leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AppLayout from "@/layouts/app-layout";
+import { mockObservations, mockSpecies } from "@/lib/mock-data";
+
+type ExploreTab = "peta" | "galeri";
+
+// Leaflet marker asset fix for Vite/React setup
+if ((L.Icon.Default.prototype as any)._getIconUrl) {
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+}
+
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
   iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
-const validated = mockObservations.filter((o) => o.status === "validated");
+const VALID_TABS: ExploreTab[] = ["peta", "galeri"];
 const CATEGORIES = ["Semua", "Hoya", "Kayu", "Plankton"];
+const validatedObservations = mockObservations.filter((o) => o.status === "validated");
+
+const getTabFromLocation = (): ExploreTab => {
+  if (typeof window === "undefined") return "peta";
+
+  const tab = new URLSearchParams(window.location.search).get("tab");
+  return VALID_TABS.includes(tab as ExploreTab) ? (tab as ExploreTab) : "peta";
+};
 
 const Jelajah = () => {
-  // Ganti: Di Inertia pake router.visit atau router.get, bukan useNavigate
+  const [activeTab, setActiveTab] = useState<ExploreTab>(() => getTabFromLocation());
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [selectedSpecies, setSelectedSpecies] = useState<string | null>(null);
 
-  const filteredSpecies = mockSpecies.filter((s) => {
-    const matchSearch =
-      s.commonName.toLowerCase().includes(search.toLowerCase()) ||
-      s.scientificName.toLowerCase().includes(search.toLowerCase());
-    
-    const matchCategory = selectedCategory === "Semua" || s.category === selectedCategory;
-
-    return matchSearch && matchCategory;
-  });
-
-  const speciesObservations = selectedSpecies 
-    ? validated.filter(obs => obs.speciesName === selectedSpecies)
-    : [];
-
-const Jelajah = () => {
-  // 1. Ambil parameter tab dari URL saat ini
-  const queryParams = new URLSearchParams(window.location.search);
-  const initialTab = queryParams.get('tab') || "peta"; // Default ke peta kalau gak ada parameter
-
-  const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Semua");
-  const [selectedSpecies, setSelectedSpecies] = useState<string | null>(null);
-  
-  // 2. State untuk mengontrol tab yang aktif
-  const [activeTab, setActiveTab] = useState(initialTab);
-
-  // 3. Logic agar tab sinkron kalau user klik tombol navigasi browser (Back/Forward)
   useEffect(() => {
-    const tabFromUrl = new URLSearchParams(window.location.search).get('tab');
-    if (tabFromUrl) {
-      setActiveTab(tabFromUrl);
-    }
+    if (typeof window === "undefined") return;
+
+    const handlePopState = () => {
+      setActiveTab(getTabFromLocation());
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, []);
 
-return (
+  const filteredSpecies = useMemo(() => {
+    return mockSpecies.filter((species) => {
+      const keyword = search.toLowerCase();
+      const matchSearch =
+        species.commonName.toLowerCase().includes(keyword) ||
+        species.scientificName.toLowerCase().includes(keyword);
+
+      const matchCategory = selectedCategory === "Semua" || species.category === selectedCategory;
+
+      return matchSearch && matchCategory;
+    });
+  }, [search, selectedCategory]);
+
+  const speciesObservations = useMemo(() => {
+    if (!selectedSpecies) return [];
+    return validatedObservations.filter((observation) => observation.speciesName === selectedSpecies);
+  }, [selectedSpecies]);
+
+  const onTabChange = (value: string) => {
+    if (!VALID_TABS.includes(value as ExploreTab)) return;
+
+    const nextTab = value as ExploreTab;
+    setActiveTab(nextTab);
+
+    if (typeof window === "undefined") return;
+
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("tab", nextTab);
+    window.history.replaceState({}, "", nextUrl.toString());
+  };
+
+  return (
     <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <h1 className="mb-2 text-3xl font-bold">Jelajah Biodiversitas</h1>
         <p className="mb-6 text-muted-foreground">Eksplorasi observasi yang sudah divalidasi</p>
 
-        <Tabs 
-          value={activeTab} 
-          onValueChange={setActiveTab} 
-          className="space-y-4"
-        >
+        <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-4">
           <TabsList>
             <TabsTrigger value="peta" className="gap-2">
               <Map className="h-4 w-4" /> Peta Interaktif
@@ -86,53 +105,39 @@ return (
 
           <TabsContent value="peta">
             <div className="overflow-hidden rounded-lg border" style={{ height: "500px" }}>
-              <MapContainer
-                center={[-2.5, 118]}
-                zoom={5}
-                style={{ height: "100%", width: "100%" }}
-              >
+              <MapContainer center={[-2.5, 118]} zoom={5} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {validated.map((obs) => (
-                  <Marker key={obs.id} position={[obs.latitude, obs.longitude]}>
-                    <Popup
-                      eventHandlers={{
-                        add: (e: any) => { // Fix: Tambah tipe any
-                          const popupNode = e.target.getElement();
 
-                          if (popupNode) {
-                            popupNode
-                              .querySelector(".detail-btn")
-                              ?.addEventListener("click", (ev: any) => { // Fix: Tambah tipe any
-                                ev.stopPropagation();
-                                router.visit(`/detailSpesies/${obs.id}`);
-                              });
-                          }
-                        },
-                      }}
-                    >
+                {validatedObservations.map((observation) => (
+                  <Marker
+                    key={observation.id}
+                    position={[observation.latitude, observation.longitude]}
+                  >
+                    <Popup>
                       <div className="w-52">
-                      <img
-                        src={obs.photoUrl}
-                        alt={obs.speciesName}
-                        className="mb-2 h-32 w-full rounded object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                      />
-                      <p className="font-bold">{obs.speciesName}</p>
-                      <p className="text-xs italic text-gray-500">{obs.scientificName}</p>
-                      <p className="mt-1 text-xs">📅 {obs.date}</p>
-                      <p className="text-xs">👤 {obs.observer}</p>
-                      
-                      <Button 
-                        size="sm" 
-                        className="w-full mt-2 gap-2 cursor-pointer relative z-50 detail-btn" 
-                        onClick={() => { router.visit(`/detailSpesies/${obs.id}`); }}
-                      >
-                        Lihat Detail
-                      </Button>
-                      
+                        <img
+                          src={observation.photoUrl}
+                          alt={observation.speciesName}
+                          className="mb-2 h-32 w-full rounded object-cover"
+                          onError={(event) => {
+                            (event.target as HTMLImageElement).src = "/placeholder.svg";
+                          }}
+                        />
+                        <p className="font-bold">{observation.speciesName}</p>
+                        <p className="text-xs italic text-gray-500">{observation.scientificName}</p>
+                        <p className="mt-1 text-xs">📅 {observation.date}</p>
+                        <p className="text-xs">👤 {observation.observer}</p>
+
+                        <Button
+                          size="sm"
+                          className="mt-2 w-full gap-2"
+                          onClick={() => router.visit(`/detailSpesies/${observation.id}`)}
+                        >
+                          Lihat Detail
+                        </Button>
                       </div>
                     </Popup>
                   </Marker>
@@ -146,30 +151,35 @@ return (
               <div>
                 <button
                   onClick={() => setSelectedSpecies(null)}
-                  className="mb-6 flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="mb-6 flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" /> Kembali ke Daftar Spesies
                 </button>
 
                 {speciesObservations.length > 0 ? (
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {speciesObservations.map((obs) => (
-                      <Card key={obs.id} className="overflow-hidden transition-all hover:shadow-md">
+                    {speciesObservations.map((observation) => (
+                      <Card key={observation.id} className="overflow-hidden transition-all hover:shadow-md">
                         <img
-                          src={obs.photoUrl}
-                          alt={obs.speciesName}
+                          src={observation.photoUrl}
+                          alt={observation.speciesName}
                           className="h-48 w-full object-cover transition-transform hover:scale-105"
-                          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                          onError={(event) => {
+                            (event.target as HTMLImageElement).src = "/placeholder.svg";
+                          }}
                         />
                         <CardContent className="p-4">
-                          <p className="text-xs text-muted-foreground mb-1">📅 {obs.date} • 👤 {obs.observer}</p>
-                          <h3 className="font-bold text-lg">{obs.speciesName}</h3>
-                          <p className="text-sm italic text-muted-foreground mb-3">{obs.scientificName}</p>
-                          
-                          <Button 
-                            size="sm" 
-                            className="w-full mt-2 gap-2" 
-                            onClick={() => router.visit(`/detailSpesies/${obs.id}`)} 
+                          <p className="mb-1 text-xs text-muted-foreground">
+                            📅 {observation.date} • 👤 {observation.observer}
+                          </p>
+                          <h3 className="text-lg font-bold">{observation.speciesName}</h3>
+                          <p className="mb-3 text-sm italic text-muted-foreground">
+                            {observation.scientificName}
+                          </p>
+                          <Button
+                            size="sm"
+                            className="mt-2 w-full gap-2"
+                            onClick={() => router.visit(`/detailSpesies/${observation.id}`)}
                           >
                             Lihat Detail
                           </Button>
@@ -178,8 +188,10 @@ return (
                     ))}
                   </div>
                 ) : (
-                  <div className="py-12 text-center border rounded-lg bg-muted/20">
-                    <p className="text-muted-foreground">Belum ada data observasi untuk spesies {selectedSpecies}.</p>
+                  <div className="rounded-lg border bg-muted/20 py-12 text-center">
+                    <p className="text-muted-foreground">
+                      Belum ada data observasi untuk spesies {selectedSpecies}.
+                    </p>
                   </div>
                 )}
               </div>
@@ -191,24 +203,24 @@ return (
                     <Input
                       placeholder="Cari nama spesies..."
                       value={search}
-                      onChange={(e) => setSearch(e.target.value)}
+                      onChange={(event) => setSearch(event.target.value)}
                       className="pl-10"
                     />
                   </div>
-                  
+
                   <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                    <Filter className="h-4 w-4 text-muted-foreground mr-1 hidden sm:block" />
-                    {CATEGORIES.map((cat) => (
+                    <Filter className="mr-1 hidden h-4 w-4 text-muted-foreground sm:block" />
+                    {CATEGORIES.map((category) => (
                       <button
-                        key={cat}
-                        onClick={() => setSelectedCategory(cat)}
-                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${
-                          selectedCategory === cat
-                            ? "bg-primary text-primary-foreground border-primary"
-                            : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent border-border"
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                          selectedCategory === category
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-background text-foreground hover:border-accent hover:bg-accent hover:text-accent-foreground"
                         }`}
                       >
-                        {cat}
+                        {category}
                       </button>
                     ))}
                   </div>
@@ -222,26 +234,35 @@ return (
                           src={species.photoUrl}
                           alt={species.commonName}
                           className="h-48 w-full object-cover transition-transform hover:scale-105"
-                          onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                          onError={(event) => {
+                            (event.target as HTMLImageElement).src = "/placeholder.svg";
+                          }}
                         />
                         <CardContent className="p-4">
-                          <h3 className="font-bold text-lg">{species.commonName}</h3>
-                          <p className="text-sm italic text-muted-foreground mb-3">{species.scientificName}</p>
+                          <h3 className="text-lg font-bold">{species.commonName}</h3>
+                          <p className="mb-3 text-sm italic text-muted-foreground">
+                            {species.scientificName}
+                          </p>
                           <div className="flex items-center justify-between">
-                            <Badge variant={
-                              species.category === 'Hoya' ? 'default' : 
-                              species.category === 'Kayu' ? 'secondary' : 'outline'
-                            }>
+                            <Badge
+                              variant={
+                                species.category === "Hoya"
+                                  ? "default"
+                                  : species.category === "Kayu"
+                                    ? "secondary"
+                                    : "outline"
+                              }
+                            >
                               {species.category}
                             </Badge>
-                            <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
+                            <span className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
                               {species.observationCount} obs
                             </span>
                           </div>
-                          <Button 
-                            size="sm" 
-                            className="w-full mt-2 gap-2" 
-                            onClick={() => setSelectedSpecies(species.commonName)} 
+                          <Button
+                            size="sm"
+                            className="mt-2 w-full gap-2"
+                            onClick={() => setSelectedSpecies(species.commonName)}
                           >
                             Lihat Daftar Observasi
                           </Button>
@@ -250,11 +271,16 @@ return (
                     ))}
                   </div>
                 ) : (
-                  <div className="py-12 text-center border rounded-lg bg-muted/20">
-                    <p className="text-muted-foreground">Tidak ada spesies yang cocok dengan filter tersebut.</p>
-                    <button 
-                      onClick={() => {setSearch(""); setSelectedCategory("Semua");}}
-                      className="mt-4 text-primary hover:underline font-medium"
+                  <div className="rounded-lg border bg-muted/20 py-12 text-center">
+                    <p className="text-muted-foreground">
+                      Tidak ada spesies yang cocok dengan filter tersebut.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setSearch("");
+                        setSelectedCategory("Semua");
+                      }}
+                      className="mt-4 font-medium text-primary hover:underline"
                     >
                       Reset Filter
                     </button>
@@ -268,6 +294,5 @@ return (
     </AppLayout>
   );
 };
-}
 
 export default Jelajah;
