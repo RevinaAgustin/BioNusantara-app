@@ -4,21 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\Admin\VerificationService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class VerificationController extends Controller
 {
+    protected $verificationService;
+
+    public function __construct(VerificationService $verificationService)
+    {
+        $this->verificationService = $verificationService;
+    }
+
     public function index(Request $request)
     {
-        $experts = User::where('role', 'expert')
-            ->when($request->search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%");
-            })
-            ->paginate(10);
-
         return Inertia::render('admin/verifikasi/index', [
-            'experts' => $experts,
+            'experts' => $this->verificationService->getPendingExperts($request->search),
         ]);
     }
 
@@ -28,10 +30,12 @@ class VerificationController extends Controller
             'status' => 'required|in:verified,rejected',
         ]);
 
-        $expert->update([
-            'expert_verified_at' => $request->status === 'verified' ? now() : null,
-        ]);
+        $this->verificationService->processVerification($expert, $request->status);
 
-        return back()->with('success', 'Status verifikasi akun Expert diperbarui.');
+        $message = $request->status === 'verified' 
+            ? 'Akun Ahli berhasil disetujui.' 
+            : 'Pengajuan ditolak dan akun dihapus.';
+
+        return back()->with('success', $message);
     }
 }
