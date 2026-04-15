@@ -14,7 +14,8 @@ const fadeUp = {
 const Welcome = () => {
   return (
     <AppLayout>
-      <div className="flex flex-col">
+            <div className="relative flex flex-col">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-emerald-500/12 to-transparent dark:from-emerald-400/10" />
         {/* Hero Section */}
         <section className="relative overflow-hidden">
           <div className="container mx-auto px-4 py-20 md:py-32">
@@ -49,10 +50,13 @@ const Welcome = () => {
         </section>
 
         {/* Stats Section */}
-        <section className="border-y border-white/10 py-12">
+        <section className="border-y border-border/60 py-12">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
             {['Total Observasi', 'Total Spesies', 'Kontributor aktif'].map((title, i) => (
-              <div key={title} className="relative group overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 hover:shadow-xl">
+               <div
+                key={title}
+                className="group relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-card hover:shadow-xl dark:bg-card/60"
+              >
                 <div className={`absolute -right-4 -top-4 h-24 w-24 rounded-full blur-2xl transition-all ${i === 0 ? 'bg-primary/20' : i === 1 ? 'bg-blue-500/20' : 'bg-purple-500/20'}`} />
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
                 <div className="mt-2 flex items-baseline gap-2">
@@ -75,7 +79,7 @@ const Welcome = () => {
                 { title: "Validasi & Publikasi", icon: CheckCircle, color: "bg-blue-500/20 text-blue-600" },
               ].map((step, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                  <Card className="border-white/20 bg-white/5 backdrop-blur-sm shadow-md">
+                  <Card className="border-border/70 bg-card/60 backdrop-blur-sm shadow-md dark:bg-card/50">
                     <CardContent className="flex flex-col items-center p-8">
                       <div className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${step.color}`}>
                         <step.icon className="h-7 w-7" />
@@ -90,7 +94,7 @@ const Welcome = () => {
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-white/10 py-8 text-center text-sm text-muted-foreground">
+         <footer className="border-t border-border/60 py-8 text-center text-sm text-muted-foreground">
           <div className="flex justify-center items-center gap-2 font-medium text-foreground mb-2">
             <Leaf className="h-4 w-4 text-primary" /> BioNusantara
           </div>

@@ -15,7 +15,7 @@ let currentAppearance: Appearance = 'light';
 const prefersDark = (): boolean => {
     if (typeof window === 'undefined') return false;
 
-    return window.matchMedia('(prefers-color-scheme: light)').matches;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
 };
 
 const setCookie = (name: string, value: string, days = 365): void => {

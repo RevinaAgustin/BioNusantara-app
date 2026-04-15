@@ -94,7 +94,7 @@ const Jelajah = () => {
         <p className="mb-6 text-muted-foreground">Eksplorasi observasi yang sudah divalidasi</p>
 
         <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-4">
-          <TabsList>
+          <TabsList className="border border-border/70 bg-card/70 dark:bg-card/60">
             <TabsTrigger value="peta" className="gap-2">
               <Map className="h-4 w-4" /> Peta Interaktif
             </TabsTrigger>
@@ -104,7 +104,7 @@ const Jelajah = () => {
           </TabsList>
 
           <TabsContent value="peta">
-            <div className="overflow-hidden rounded-lg border" style={{ height: "500px" }}>
+            <div className="overflow-hidden rounded-lg border border-border/70 bg-card/70" style={{ height: "500px" }}>
               <MapContainer center={[-2.5, 118]} zoom={5} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
