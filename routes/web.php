@@ -6,7 +6,10 @@ use App\Http\Controllers\Admin\VerificationController as AdminVerification;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Expert\VerificationController as ExpertVerification;
 use App\Http\Controllers\User\ObservationController;
+<<<<<<< HEAD
 use App\Http\Controllers\Admin\ReportController;
+=======
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -15,17 +18,28 @@ use Laravel\Fortify\Features;
 | PUBLIC ROUTES
 |--------------------------------------------------------------------------
 */
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
 
 Route::get('/jelajah', function () {
+<<<<<<< HEAD
     return inertia('jelajah');
 })->name('explore');
 
 Route::get('/peta', function () {
     return inertia('map');
+=======
+    return inertia('Jelajah'); 
+})->name('explore');
+
+Route::get('/peta', function () {
+    return inertia('Map');
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
 })->name('map');
 
 Route::get('/detailSpesies/{id}', function ($id) {
@@ -52,14 +66,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::get('/spesies', [SpeciesController::class, 'index'])->name('species.index');
         Route::get('/verifikasi-ahli', [AdminVerification::class, 'index'])->name('verification.index');
+<<<<<<< HEAD
         Route::patch('/verifikasi-ahli/{expert}', [AdminVerification::class, 'verifyExpert'])->name('verification.verify');
         Route::get('/laporan', [ReportController::class, 'index'])->name('reports');
+=======
+        Route::get('/laporan', function () {
+            return inertia('admin/reports');
+        })->name('reports');
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
     });
 
     // Expert Routes
     Route::middleware(['role:expert'])->prefix('expert')->name('expert.')->group(function () {
         Route::get('/verifikasi', [ExpertVerification::class, 'index'])->name('verification.index');
         Route::post('/verifikasi', [ExpertVerification::class, 'store'])->name('verification.store');
+<<<<<<< HEAD
 
         Route::get('/validasi', function () {
             return inertia('expert/validasi/index');
@@ -70,6 +91,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/statistik', function () {
             return inertia('expert/stastistik/index');
         })->name('statistics.index');
+=======
+        
+        // Gue buatkan rute sementara biar nggak error pas diklik menunya
+        Route::get('/validasi', function () { return inertia('expert/validasi/index'); })->name('validation.index');
+        Route::get('/riwayat', function () { return inertia('expert/riwayat/index'); })->name('history.index');
+        Route::get('/statistik', function () { return inertia('expert/stastistik/index'); })->name('statistics.index');
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
     });
 
     // User Routes
@@ -78,7 +106,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/observasi/riwayat', [ObservationController::class, 'history'])->name('observations.history');
         Route::get('/kontribusi', [ObservationController::class, 'contributions'])->name('contributions');
     });
+<<<<<<< HEAD
 });
 
 
 require __DIR__ . '/settings.php';
+=======
+    });
+
+
+require __DIR__.'/settings.php';
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
