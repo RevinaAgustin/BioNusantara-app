@@ -4,19 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-<<<<<<< HEAD
 use App\Services\Admin\UserService;
 use Illuminate\Http\Request;
-=======
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
+ 
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
-<<<<<<< HEAD
+ 
     protected $userService;
 
     public function __construct(UserService $userService)
@@ -32,17 +30,18 @@ class UserController extends Controller
         ]);
     }
 
-    public function updateRole(Request $request, User $user)
-    {
-        $request->validate([
-            'role_id' => 'required|exists:roles,id',
-        ]);
+public function updateRole(Request $request, User $user)
+{
+    $request->validate([
+        'role_id' => 'required|exists:roles,id',
+    ]);
 
-        $this->userService->updateRole($user, $request->role_id);
+    $this->userService->updateRole($user, $request->role_id);
 
-        return redirect()->back()->with('success', "Otoritas {$user->name} berhasil diperbarui.");
-=======
-    public function index(Request $request)
+    return redirect()->back()->with('success', "Otoritas {$user->name} berhasil diperbarui.");
+}
+
+public function getAllUsers(Request $request)
     {
         $users = User::query()
             // LOGIKA: Sembunyikan akun Admin yang sedang login
@@ -66,23 +65,22 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request, User $user)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'role_id' => 'required|exists:roles,id',
+public function update(Request $request, User $user)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$user->id,
+        'role_id' => 'required|exists:roles,id',
 
-        ]);
-        $user->update($validated);
+    ]);
+    $user->update($validated);
 
-        return redirect()->back()->with('success', 'Data user berhasil diperbarui.');
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
-    }
+    return redirect()->back()->with('success', 'Data user berhasil diperbarui.');
+}
 
     public function toggleStatus(User $user)
     {
-<<<<<<< HEAD
+ 
         $this->userService->toggleUserStatus($user);
         $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
         
@@ -98,22 +96,6 @@ class UserController extends Controller
             : redirect()->back()->with('error', 'Gagal mengirim email reset.');
     }
 
-    public function destroy(User $user)
-    {
-        $this->userService->deleteUser($user);
-        return redirect()->back()->with('success', 'Akun user berhasil dihapus.');
-    }
-}
-=======
-        // LOGIKA: Toggle kolom is_active
-        $user->is_active = ! $user->is_active;
-        $user->save();
-
-        $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
-
-        return redirect()->back()->with('success', "Akun {$user->name} berhasil {$status}.");
-    }
-
     public function resetPassword(Request $request, User $user)
     {
         $request->validate(['password' => 'required|string|min:8']);
@@ -124,9 +106,6 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Password user berhasil direset.');
     }
 
-    /**
-     * Remove user.
-     */
     public function destroy(User $user)
     {
         // Perbaikan: Gunakan Auth::id() untuk menghilangkan error Intelephense
@@ -138,4 +117,4 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Akun user berhasil dihapus permanen.');
     }
 }
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
+ 

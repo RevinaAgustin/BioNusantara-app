@@ -17,8 +17,8 @@ export default function AppLogo() {
             </div>
         </Link>
     );
-<<<<<<< HEAD
-=======
+ 
+ 
     
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
+ 
 }

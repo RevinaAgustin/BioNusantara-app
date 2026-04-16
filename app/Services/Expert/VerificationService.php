@@ -234,8 +234,8 @@ class VerificationService
             ->where('expert_id', $expertId)
             ->exists();
     }
-<<<<<<< HEAD
+ 
 }
-=======
+ 
 }
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
+ 

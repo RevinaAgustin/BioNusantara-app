@@ -34,11 +34,11 @@ export default function VerifyEmail({ status }: { status?: string }) {
                             href={logout()}
                             className="mx-auto block text-sm"
                         >
-<<<<<<< HEAD
+ 
                             Log out
-=======
+ 
                             Keluar
->>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
+ 
                         </TextLink>
                     </>
                 )}
