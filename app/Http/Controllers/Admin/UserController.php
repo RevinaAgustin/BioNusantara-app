@@ -4,13 +4,44 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+<<<<<<< HEAD
+use App\Services\Admin\UserService;
+use Illuminate\Http\Request;
+=======
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
+<<<<<<< HEAD
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
+    public function index(Request $request)
+    {
+        return Inertia::render('admin/users/index', [
+            'users' => $this->userService->getPaginatedUsers($request->search),
+            'filters' => $request->only(['search'])
+        ]);
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        $request->validate([
+            'role_id' => 'required|exists:roles,id',
+        ]);
+
+        $this->userService->updateRole($user, $request->role_id);
+
+        return redirect()->back()->with('success', "Otoritas {$user->name} berhasil diperbarui.");
+=======
     public function index(Request $request)
     {
         $users = User::query()
@@ -46,10 +77,34 @@ class UserController extends Controller
         $user->update($validated);
 
         return redirect()->back()->with('success', 'Data user berhasil diperbarui.');
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
     }
 
     public function toggleStatus(User $user)
     {
+<<<<<<< HEAD
+        $this->userService->toggleUserStatus($user);
+        $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        
+        return redirect()->back()->with('success', "Akun {$user->name} berhasil {$status}.");
+    }
+
+    public function sendResetLink(User $user)
+    {
+        $status = $this->userService->sendPasswordReset($user);
+
+        return $status === \Illuminate\Support\Facades\Password::RESET_LINK_SENT
+            ? redirect()->back()->with('success', 'Link reset password telah dikirim.')
+            : redirect()->back()->with('error', 'Gagal mengirim email reset.');
+    }
+
+    public function destroy(User $user)
+    {
+        $this->userService->deleteUser($user);
+        return redirect()->back()->with('success', 'Akun user berhasil dihapus.');
+    }
+}
+=======
         // LOGIKA: Toggle kolom is_active
         $user->is_active = ! $user->is_active;
         $user->save();
@@ -83,3 +138,4 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Akun user berhasil dihapus permanen.');
     }
 }
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
