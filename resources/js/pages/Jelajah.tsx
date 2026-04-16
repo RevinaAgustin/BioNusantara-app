@@ -89,14 +89,17 @@ const Jelajah = () => {
 
     return (
         <AppLayout>
-            <div className="container mx-auto px-4 py-8">
-                <h1 className="mb-2 text-3xl font-bold">Jelajah Biodiversitas</h1>
+            <div className="relative container mx-auto px-4 py-8">
+                <div className="pointer-events-none absolute -top-12 -left-10 h-56 w-56 rounded-full bg-emerald-400/20 blur-3xl" />
+                <div className="pointer-events-none absolute top-10 -right-14 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
+
+                <h1 className="mb-2 text-3xl font-bold tracking-tight">Jelajah Biodiversitas</h1>
                 <p className="mb-6 text-muted-foreground">
                     Eksplorasi observasi yang sudah divalidasi
                 </p>
 
                 <Tabs value={activeTab} onValueChange={onTabChange} className="space-y-4">
-                    <TabsList className="border border-border/70 bg-card/70 dark:bg-card/60">
+                    <TabsList className="h-auto rounded-xl border border-border/70 bg-card/70 p-1 shadow-sm backdrop-blur-md dark:bg-card/60">
                         <TabsTrigger value="peta" className="gap-2">
                             <Map className="h-4 w-4" /> Peta Interaktif
                         </TabsTrigger>
@@ -107,7 +110,7 @@ const Jelajah = () => {
 
                     <TabsContent value="peta">
                         <div
-                            className="overflow-hidden rounded-lg border border-border/70 bg-card/70"
+                            className="overflow-hidden rounded-2xl border border-border/70 bg-card/70 shadow-lg backdrop-blur-sm"
                             style={{ height: '500px' }}
                         >
                             <MapContainer
@@ -167,7 +170,7 @@ const Jelajah = () => {
                             <div>
                                 <button
                                     onClick={() => setSelectedSpecies(null)}
-                                    className="mb-6 flex items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                     className="mb-6 inline-flex items-center rounded-full border border-border/70 bg-card/70 px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:border-primary/50 hover:text-foreground"
                                 >
                                     <ArrowLeft className="mr-2 h-4 w-4" /> Kembali ke Daftar Spesies
                                 </button>
@@ -177,7 +180,7 @@ const Jelajah = () => {
                                         {speciesObservations.map((observation) => (
                                             <Card
                                                 key={observation.id}
-                                                className="overflow-hidden transition-all hover:shadow-md"
+                                                 className="overflow-hidden border-border/70 bg-card/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                                             >
                                                 <img
                                                     src={observation.photoUrl}
@@ -230,7 +233,7 @@ const Jelajah = () => {
                                             placeholder="Cari nama spesies..."
                                             value={search}
                                             onChange={(event) => setSearch(event.target.value)}
-                                            className="pl-10"
+                                             className="h-11 rounded-xl border-border/70 bg-card/70 pl-10 shadow-sm"
                                         />
                                     </div>
 
@@ -240,10 +243,10 @@ const Jelajah = () => {
                                             <button
                                                 key={category}
                                                 onClick={() => setSelectedCategory(category)}
-                                                className={`rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+                                                 className={`rounded-full border px-4 py-2 text-sm font-medium whitespace-nowrap transition-all duration-200 ${
                                                     selectedCategory === category
-                                                        ? 'border-primary bg-primary text-primary-foreground'
-                                                        : 'border-border bg-background text-foreground hover:border-accent hover:bg-accent hover:text-accent-foreground'
+                                                         ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+                                                        : 'border-border bg-background text-foreground hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-foreground'
                                                 }`}
                                             >
                                                 {category}
@@ -257,7 +260,7 @@ const Jelajah = () => {
                                         {filteredSpecies.map((species) => (
                                             <Card
                                                 key={species.id}
-                                                className="overflow-hidden transition-all hover:shadow-md"
+                                                className="overflow-hidden border-border/70 bg-card/70 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                                             >
                                                 <img
                                                     src={species.photoUrl}

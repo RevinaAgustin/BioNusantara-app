@@ -15,14 +15,14 @@ const fadeUp = {
 const Welcome = () => {
     return (
         <AppLayout>
-            <div className="relative flex flex-col">
+            <div className="relative flex flex-col overflow-hidden">
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-linear-to-b from-emerald-500/12 to-transparent dark:from-emerald-400/10" />
-
+                            <div className="pointer-events-none absolute -top-16 -left-20 h-64 w-64 rounded-full bg-emerald-400/20 blur-3xl" />
+                <div className="pointer-events-none absolute top-44 -right-20 h-64 w-64 rounded-full bg-sky-400/20 blur-3xl" />
                 <section className="relative overflow-hidden">
                     <div className="container mx-auto px-4 py-20 md:py-32">
                         <motion.div className="mx-auto max-w-3xl text-center" {...fadeUp}>
-                            <div className="mb-6 inline-flex items-center gap-2 rounded-full border bg-background/60 px-4 py-1.5 text-sm font-medium backdrop-blur-sm">
-                                <Leaf className="h-4 w-4 text-primary" />
+                             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-1.5 text-sm font-medium shadow-sm backdrop-blur-md">
                                 Citizen Science Indonesia
                             </div>
                             <h1 className="mb-6 text-4xl font-bold leading-tight text-foreground md:text-6xl">
@@ -52,12 +52,12 @@ const Welcome = () => {
                     </div>
                 </section>
 
-                <section className="border-y border-border/60 py-12">
+                <section className="border-y border-border/60 bg-muted/20 py-12">
                     <div className="container mx-auto grid grid-cols-1 gap-6 px-4 md:grid-cols-3">
                         {['Total Observasi', 'Total Spesies', 'Kontributor aktif'].map((title, i) => (
                             <div
                                 key={title}
-                                className="group relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-8 shadow-lg backdrop-blur-md transition-all hover:bg-card hover:shadow-xl dark:bg-card/60"
+                                 className="group relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-8 shadow-lg backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-card hover:shadow-xl dark:bg-card/60"
                             >
                                 <div
                                     className={`absolute -top-4 -right-4 h-24 w-24 rounded-full blur-2xl transition-all ${
@@ -81,7 +81,7 @@ const Welcome = () => {
                     </div>
                 </section>
 
-                <section className="py-20">
+                <section className="relative py-20">
                     <div className="container mx-auto px-4 text-center">
                         <h2 className="mb-3 text-3xl font-bold text-foreground">
                             Bagaimana Cara Kerjanya?
@@ -113,7 +113,7 @@ const Welcome = () => {
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                 >
-                                    <Card className="border-border/70 bg-card/60 shadow-md backdrop-blur-sm dark:bg-card/50">
+                                    <Card className="border-border/70 bg-card/60 shadow-md backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:bg-card/50">
                                         <CardContent className="flex flex-col items-center p-8">
                                             <div
                                                 className={`mb-4 flex h-14 w-14 items-center justify-center rounded-2xl ${step.color}`}
