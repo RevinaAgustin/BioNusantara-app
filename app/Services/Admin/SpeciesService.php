@@ -9,6 +9,12 @@ class SpeciesService
     /**
      * Mengambil semua data spesies untuk ditampilkan di index.
      */
+<<<<<<< HEAD
+    public function getAllSpecies()
+    {
+        return Species::latest()->get();
+    }
+=======
 public function getAllSpecies($search = null, $category = null)
 {
     return \App\Models\Species::query()
@@ -25,6 +31,7 @@ public function getAllSpecies($search = null, $category = null)
         ->latest()
         ->get();
 }
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36
 
     /**
      * Logika untuk menyimpan spesies baru.
@@ -40,7 +47,13 @@ public function getAllSpecies($search = null, $category = null)
     public function deleteSpecies(int $id)
     {
         $species = Species::findOrFail($id);
+<<<<<<< HEAD
+        return $species->delete();
+    }
+}
+=======
 
         return $species->delete();
     }
 }
+>>>>>>> 8071d13446745e222fe9619d7717fefb0162ec36

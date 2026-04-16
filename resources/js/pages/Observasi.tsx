@@ -53,7 +53,6 @@ const LocationPicker = ({ position, setPosition, setFormData }: any) => {
 
 /* Main Component */
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Dashboard', href: '/dashboard' },
   { title: 'Buat Observasi', href: '/user/observasi/buat' }
 ];
 
