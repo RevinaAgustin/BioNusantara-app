@@ -48,10 +48,10 @@ export default function SpeciesIndex({ species, filters }: any) {
                                 }}
                                 className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase transition-all border ${
                                     category === cat 
-                                    ? 'bg-neutral-900 text-white border-neutral-900 dark:bg-neutral-100 dark:text-neutral-900' 
-                                    : 'bg-white text-neutral-500 border-neutral-200 hover:bg-neutral-50'
-                                }`}
-                            >
+                                    ? "bg-orange-500 text-white border-orange-500"
+                                    : "bg-white text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300"
+                                    }`}
+                                    >
                                 {cat}
                             </button>
                         ))}

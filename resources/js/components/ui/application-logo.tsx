@@ -1,8 +1,8 @@
-interface AppLogoIconProps {
+interface ApplicationLogoProps {
     className?: string;
 }
 
-export default function AppLogoIcon({ className = 'h-8 w-8' }: AppLogoIconProps) {
+export default function ApplicationLogo({ className = 'h-10 w-10' }: ApplicationLogoProps) {
     return (
         <img
             src="/images/logo_bionus.svg"

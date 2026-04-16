@@ -17,7 +17,7 @@ class ObservationController extends Controller
     {
         $userId = Auth::id();
 
-        return Inertia::render('User/Observation/Index', [
+        return Inertia::render('user/observasi', [
             'observations' => Observation::with(['photos', 'species'])
                 ->where('user_id', $userId)
                 ->latest()
@@ -30,7 +30,7 @@ class ObservationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('observasi', [
+        return Inertia::render('user/observasi/buat', [
             'speciesList' => Species::select('id', 'scientific_name', 'category')->get(),
         ]);
     }
@@ -39,7 +39,7 @@ class ObservationController extends Controller
      {
          $userId = Auth::id();
  
-         return Inertia::render('history', [
+         return Inertia::render('user/observasi/riwayat', [
              'observations' => Observation::with(['photos', 'species'])
                  ->where('user_id', $userId)
                  ->whereIn('status', ['draft', 'pending', 'rejected'])
@@ -52,7 +52,7 @@ class ObservationController extends Controller
      {
          $userId = Auth::id();
  
-         return Inertia::render('contributions', [
+         return Inertia::render('user/kontribusi', [
              'observations' => Observation::with(['photos', 'species', 'verification'])
                  ->where('user_id', $userId)
                  ->where('status', 'verified')

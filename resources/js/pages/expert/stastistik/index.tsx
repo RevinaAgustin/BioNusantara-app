@@ -85,7 +85,7 @@ export default function Statistik({ statistics, distribution, monthlyTrend }: an
                     <div className="rounded-3xl border border-sidebar-border bg-white p-8 dark:bg-neutral-900 shadow-sm flex flex-col">
                         <div className="flex items-center gap-2 mb-6">
                             <Calendar className="w-5 h-5 text-blue-600" />
-                            <h3 className="font-bold">Tren Kontribusi Bulanan</h3>
+                            <h3 className="font-bold">Kontribusi Bulanan</h3>
                         </div>
                         <div className="flex flex-1 items-end justify-between gap-2 pt-4">
                             {/* Dummy bars if data is low, otherwise use monthlyTrend */}

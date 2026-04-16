@@ -7,31 +7,23 @@ use App\Models\Species;
 class SpeciesService
 {
     /**
-     * Mengambil semua data spesies untuk ditampilkan di index.
+     * Mengambil data spesies (opsional filter search + category).
      */
- 
-    public function getAllSpecies()
+    public function getAllSpecies($search = null, $category = null)
     {
-        return Species::latest()->get();
+        return Species::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('scientific_name', 'like', "%{$search}%")
+                        ->orWhere('common_name', 'like', "%{$search}%");
+                });
+            })
+            ->when($category, function ($query, $category) {
+                $query->where('category', $category);
+            })
+            ->latest()
+            ->get();
     }
- 
-public function getAllSpecies($search = null, $category = null)
-{
-    return \App\Models\Species::query()
-        // Gunakan fungsi closure (grouping) untuk pencarian
-        ->when($search, function ($query, $search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('scientific_name', 'like', "%{$search}%")
-                  ->orWhere('common_name', 'like', "%{$search}%");
-            });
-        })
-        ->when($category, function ($query, $category) {
-            $query->where('category', $category);
-        })
-        ->latest()
-        ->get();
-}
- 
 
     /**
      * Logika untuk menyimpan spesies baru.
@@ -47,13 +39,7 @@ public function getAllSpecies($search = null, $category = null)
     public function deleteSpecies(int $id)
     {
         $species = Species::findOrFail($id);
- 
-        return $species->delete();
-    }
-}
- 
 
         return $species->delete();
     }
 }
- 

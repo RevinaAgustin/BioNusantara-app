@@ -1,10 +1,8 @@
+import type { UrlMethodPair } from '@inertiajs/core';
 import type { InertiaLinkProps } from '@inertiajs/react';
 import { usePage } from '@inertiajs/react';
+
 import { toUrl } from '@/lib/utils';
- 
- 
-import { UrlMethodPair } from '@inertiajs/core';
- 
 
 export type IsCurrentUrlFn = (
     urlToCheck: NonNullable<InertiaLinkProps['href']>,
@@ -23,13 +21,11 @@ export type UseCurrentUrlReturn = {
     whenCurrentUrl: WhenCurrentUrlFn;
 };
 
- 
-export function useCurrentUrl(): UseCurrentUrlReturn {
- 
-export function useCurrentUrl(href: NonNullable<string | UrlMethodPair | undefined>): UseCurrentUrlReturn {
- 
+export function useCurrentUrl(
+    _href?: NonNullable<string | UrlMethodPair | undefined>,
+): UseCurrentUrlReturn {
     const page = usePage();
-    const currentUrlPath = new URL(page.url, window?.location.origin).pathname;
+    const currentUrlPath = new URL(page.url, window.location.origin).pathname;
 
     const isCurrentUrl: IsCurrentUrlFn = (
         urlToCheck: NonNullable<InertiaLinkProps['href']>,

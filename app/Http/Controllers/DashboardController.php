@@ -45,7 +45,7 @@ class DashboardController extends Controller
 
         // 3. DASHBOARD USER / CITIZEN SCIENTIST (Role 3)
         if ($role === 3) {
-            return Inertia::render('dashboard', [ // Default Dashboard User
+            return Inertia::render('user/dashboard', [ // Default Dashboard User
                 'user_stats' => [
                     'my_total_uploads' => Observation::where('user_id', $user->id)->count(),
                     'my_verified' => Observation::where('user_id', $user->id)->where('status', 'verified')->count(),

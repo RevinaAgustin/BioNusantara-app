@@ -28,11 +28,11 @@ Route::inertia('/', 'welcome', [
 
 Route::get('/jelajah', function () {
  
-    return inertia('jelajah');
+    return inertia('Jelajah');
 })->name('explore');
 
 Route::get('/peta', function () {
-    return inertia('map');
+    return inertia('Map');
  
     return inertia('Jelajah'); 
 })->name('explore');
@@ -40,7 +40,7 @@ Route::get('/peta', function () {
 Route::get('/peta', function () {
     return inertia('Map');
  
-})->name('map');
+})->name('Map');
 
 Route::get('/detailSpesies/{id}', function ($id) {
     return inertia('detailSpesies', [
@@ -68,11 +68,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/verifikasi-ahli', [AdminVerification::class, 'index'])->name('verification.index');
  
         Route::patch('/verifikasi-ahli/{expert}', [AdminVerification::class, 'verifyExpert'])->name('verification.verify');
+        Route::get('users/ reports', [ReportController::class, 'index'])->name('reports');
         Route::get('/laporan', [ReportController::class, 'index'])->name('reports');
- 
-        Route::get('/laporan', function () {
-            return inertia('admin/reports');
-        })->name('reports');
  
     });
 
@@ -93,7 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         })->name('statistics.index');
  
         
-        // Gue buatkan rute sementara biar nggak error pas diklik menunya
+
         Route::get('/validasi', function () { return inertia('expert/validasi/index'); })->name('validation.index');
         Route::get('/riwayat', function () { return inertia('expert/riwayat/index'); })->name('history.index');
         Route::get('/statistik', function () { return inertia('expert/stastistik/index'); })->name('statistics.index');
