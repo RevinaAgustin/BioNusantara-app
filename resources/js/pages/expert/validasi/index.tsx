@@ -15,7 +15,7 @@ export default function Validasi({ species_references }: any) {
     );
 
     return (
-        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
+        <DashboardLayout breadcrumbs={[{ title: 'Validasi Spesies', href: '/expert/validasi' }]}>
             <Head title="Validasi Spesies" />
             <div className="flex flex-col gap-6 p-6">
                 {/* Header Section */}

@@ -51,7 +51,6 @@ export function AppSidebar() {
                 { title: 'Manajemen User', href: '/admin/users', icon: Users },
                 { title: 'Manajemen Spesies', href: '/admin/spesies', icon: Leaf },
                 { title: 'Verifikasi Ahli', href: '/admin/verifikasi-ahli', icon: Award },
-                { title: 'Laporan', href: '/admin/laporan', icon: BarChart },
             );
         } 
         
@@ -61,7 +60,6 @@ export function AppSidebar() {
                 { title: 'Verifikasi Observasi', href: '/expert/verifikasi', icon: CheckCircle },
                 { title: 'Validasi Spesies', href: '/expert/validasi', icon: Shield },
                 { title: 'Riwayat Verifikasi', href: '/expert/riwayat', icon: FileText },
-                { title: 'Statistik', href: '/expert/statistik', icon: BarChart },
             );
         } 
         

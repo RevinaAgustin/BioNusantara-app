@@ -15,7 +15,7 @@ export default function Riwayat({ verifications }: any) {
     );
 
     return (
-        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
+        <DashboardLayout breadcrumbs={[{ title: 'Riwayat Verifikasi', href: '/expert/riwayat' }]}>
             <Head title="Riwayat Verifikasi" />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

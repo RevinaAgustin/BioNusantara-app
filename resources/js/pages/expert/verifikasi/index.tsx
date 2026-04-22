@@ -29,7 +29,7 @@ export default function Verifications({ pendingObservations }: any) {
     };
 
     return (
-        <DashboardLayout breadcrumbs={[{ title: 'Manajemen User', href: '/admin/users' }]}>
+        <DashboardLayout breadcrumbs={[{ title: 'Verifikasi Observasi', href: '/expert/verifikasi' }]}>
             <Head title="Verifikasi Observasi" />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex flex-col gap-1">

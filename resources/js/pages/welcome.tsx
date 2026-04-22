@@ -73,7 +73,7 @@ const Welcome = () => {
                                 </p>
                                 <div className="mt-2 flex items-baseline gap-2">
                                     <h3 className="text-4xl font-bold tracking-tight text-foreground">
-                                        {i === 0 ? '1,234' : i === 1 ? '567' : '89'}
+                                        {i === 0 ? '0' : i === 1 ? '567' : '89'}
                                     </h3>
                                 </div>
                             </div>

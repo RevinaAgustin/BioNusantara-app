@@ -85,15 +85,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/riwayat', function () {
             return inertia('expert/riwayat/index');
         })->name('history.index');
-        Route::get('/statistik', function () {
-            return inertia('expert/stastistik/index');
-        })->name('statistics.index');
  
         
 
         Route::get('/validasi', function () { return inertia('expert/validasi/index'); })->name('validation.index');
         Route::get('/riwayat', function () { return inertia('expert/riwayat/index'); })->name('history.index');
-        Route::get('/statistik', function () { return inertia('expert/stastistik/index'); })->name('statistics.index');
  
     });
 
