@@ -38,7 +38,7 @@ export default function Verifications({ pendingObservations }: any) {
                         Antrean Verifikasi
                     </h2>
                     <p className="text-sm text-neutral-500">
-                        Tinjau temuan Plankton atau Hoya dari masyarakat.
+                        Tinjau temuan Biodiversitas dari masyarakat.
                     </p>
                 </div>
 

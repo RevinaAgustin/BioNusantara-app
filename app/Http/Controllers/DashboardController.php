@@ -85,12 +85,38 @@ class DashboardController extends Controller
 
         // 3. DASHBOARD USER
         if ($role === 3) {
+            $myObservations = Observation::where('user_id', $user->id);
+
+            $userStats = [
+                'my_total_uploads' => (clone $myObservations)->count(),
+                'my_verified' => (clone $myObservations)->where('status', 'verified')->count(),
+                'my_rejected' => (clone $myObservations)->where('status', 'rejected')->count(),
+                'my_pending' => (clone $myObservations)->where('status', 'pending')->count(),
+            ];
+
+            $monthlyUploads = collect(range(5, 0))->map(function ($i) use ($user) {
+                $date = now()->subMonths($i);
+                return [
+                    'month' => $date->format('M'),
+                    'total' => Observation::where('user_id', $user->id)
+                        ->whereMonth('created_at', $date->month)
+                        ->whereYear('created_at', $date->year)
+                        ->count(),
+                ];
+            })->values();
+
+            $categoryBreakdown = Observation::query()
+                ->join('species', 'observations.species_id', '=', 'species.id')
+                ->where('observations.user_id', $user->id)
+                ->select('species.category', DB::raw('COUNT(*) as total'))
+                ->groupBy('species.category')
+                ->orderByDesc('total')
+                ->get();
+
             return Inertia::render('user/dashboard', [
-                'user_stats' => [
-                    'my_total_uploads' => Observation::where('user_id', $user->id)->count(),
-                    'my_verified' => Observation::where('user_id', $user->id)->where('status', 'verified')->count(),
-                    'my_rejected' => Observation::where('user_id', $user->id)->where('status', 'rejected')->count(),
-                ],
+                'user_stats' => $userStats,
+                'monthly_uploads' => $monthlyUploads,
+                'category_breakdown' => $categoryBreakdown,
                 'my_recent_uploads' => Observation::with('species')
                     ->where('user_id', $user->id)
                     ->latest()

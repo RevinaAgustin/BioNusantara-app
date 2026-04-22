@@ -6,10 +6,10 @@ use App\Http\Controllers\Admin\VerificationController as AdminVerification;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Expert\VerificationController as ExpertVerification;
 use App\Http\Controllers\User\ObservationController;
- 
+use App\Models\Observation;
+use App\Models\Species;
+use App\Models\User;
 use App\Http\Controllers\Admin\ReportController;
- 
- 
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -20,11 +20,21 @@ use Laravel\Fortify\Features;
 */
  
 
+
  
  
-Route::inertia('/', 'welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', function () {
+    return inertia('welcome', [
+        'canRegister' => Features::enabled(Features::registration()),
+        'stats' => [
+            'totalObservations' => Observation::count(),
+            'totalSpecies' => Species::count(),
+            'activeContributors' => User::where('is_active', true)
+                ->whereHas('role', fn ($query) => $query->where('name', 'user'))
+                ->count(),
+        ],
+    ]);
+})->name('home');
 
 Route::get('/jelajah', function () {
  
@@ -104,5 +114,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 require __DIR__ . '/settings.php';
-
- 
